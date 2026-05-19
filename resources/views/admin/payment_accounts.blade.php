@@ -12,7 +12,7 @@
     <!-- Registration Form -->
     <div class="glass" style="padding: 3rem; border-radius: 40px; margin-bottom: 4rem;">
         <h3 style="margin-bottom: 2rem; font-weight: 800;">Register New Account</h3>
-        <form action="{{ route('admin.payment_accounts.store') }}" method="POST" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; align-items: end;">
+        <form action="{{ route('admin.payment_accounts.store') }}" method="POST" class="form-grid-admin" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; align-items: end;">
             @csrf
             <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                 <label style="font-weight: 700; opacity: 0.7;">Bakong ID / Account ID</label>

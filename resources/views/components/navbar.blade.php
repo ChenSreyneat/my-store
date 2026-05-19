@@ -17,8 +17,7 @@
             </button>
             
             <a href="{{ route('home') }}" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none;">
-                <div style="width: 40px; height: 40px; background: var(--text-gradient); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 1.2rem;">E</div>
-                <span class="text-gradient desktop-only" style="font-size: 1.4rem; font-family: 'Outfit'; font-weight: 800;">ElitePC</span>
+                <span class="text-gradient" style="font-size: 1.4rem; font-family: 'Outfit'; font-weight: 800;">ElitePC</span>
             </a>
         </div>
 
@@ -94,7 +93,6 @@
         <!-- Header -->
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem;">
             <div style="display: flex; align-items: center; gap: 0.8rem;">
-                <div style="width: 38px; height: 38px; background: var(--text-gradient); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 1.1rem;">E</div>
                 <span class="text-gradient" style="font-size: 1.3rem; font-family: 'Outfit'; font-weight: 800;">ElitePC</span>
             </div>
             <button id="mobile-close" style="background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text); padding: 8px; border-radius: 10px; cursor: pointer;">

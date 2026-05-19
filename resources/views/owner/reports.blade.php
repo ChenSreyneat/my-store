@@ -33,7 +33,7 @@
         </div>
     </div>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 3rem; margin-bottom: 4rem;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(285px, 1fr)); gap: clamp(1rem, 2.5vw, 3rem); margin-bottom: 4rem;">
         <!-- Monthly Earnings Chart -->
         <div class="glass" style="padding: 3rem; border-radius: 40px;">
             <h3 style="margin-bottom: 2rem; font-weight: 800;">Earnings Trend</h3>
@@ -65,8 +65,8 @@
         </div>
     </div>
 
-    <!-- Recent Store Activity -->
-    <div class="glass" style="padding: 3rem; border-radius: 40px;">
+    <!-- Desktop Table View -->
+    <div class="glass desktop-only" style="padding: 3rem; border-radius: 40px; display: none;">
         <h3 style="margin-bottom: 2rem; font-weight: 800;">Recent Store Orders</h3>
         <div class="table-responsive">
             <table style="width: 100%; border-collapse: collapse; text-align: left;">
@@ -81,10 +81,19 @@
                 </thead>
                 <tbody>
                     @foreach($recentOrders as $order)
+                    @php
+                        $storeId = Auth::user()->store_id;
+                        $ownerItems = $order->items->filter(function($item) use ($storeId) {
+                            return $item->product->store_id == $storeId;
+                        });
+                        $ownerSubtotal = $ownerItems->sum(function($item) {
+                            return $item->price * $item->quantity;
+                        });
+                    @endphp
                     <tr style="border-bottom: 1px solid var(--glass-border);">
                         <td style="padding: 1.5rem; font-weight: 700;">#{{ $order->id }}</td>
                         <td style="padding: 1.5rem;">{{ $order->user->name }}</td>
-                        <td style="padding: 1.5rem; font-weight: 800;">${{ number_format($order->total_amount, 2) }}</td>
+                        <td style="padding: 1.5rem; font-weight: 800;">${{ number_format($ownerSubtotal, 2) }}</td>
                         <td style="padding: 1.5rem;">
                             <span style="padding: 0.3rem 0.8rem; border-radius: 50px; font-size: 0.7rem; font-weight: 700; background: {{ $order->status === 'paid' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(234, 179, 8, 0.1)' }}; color: {{ $order->status === 'paid' ? '#10b981' : '#eab308' }};">
                                 {{ strtoupper($order->status) }}
@@ -97,6 +106,58 @@
             </table>
         </div>
     </div>
+
+    <!-- Mobile Stacked Card View -->
+    <div class="mobile-only" style="display: none;">
+        <div class="glass" style="padding: 2.5rem; border-radius: 40px; margin-bottom: 2rem;">
+            <h3 style="margin-bottom: 2rem; font-weight: 800;">Recent Store Orders</h3>
+            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                @foreach($recentOrders as $order)
+                @php
+                    $storeId = Auth::user()->store_id;
+                    $ownerItems = $order->items->filter(function($item) use ($storeId) {
+                        return $item->product->store_id == $storeId;
+                    });
+                    $ownerSubtotal = $ownerItems->sum(function($item) {
+                        return $item->price * $item->quantity;
+                    });
+                @endphp
+                <div class="glass-card" style="padding: 2rem; border-radius: 24px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem;">
+                        <span style="font-weight: 900; font-family: 'Outfit'; color: var(--primary);">#{{ $order->id }}</span>
+                        <span style="opacity: 0.5; font-size: 0.75rem;">{{ $order->created_at->format('M d, Y') }}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--glass-border);">
+                        <div>
+                            <div style="font-weight: 800; font-size: 0.95rem;">{{ $order->user->name }}</div>
+                            <div style="font-size: 0.75rem; opacity: 0.4;">Customer</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <span style="padding: 0.3rem 0.8rem; border-radius: 50px; font-size: 0.65rem; font-weight: 700; background: {{ $order->status === 'paid' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(234, 179, 8, 0.1)' }}; color: {{ $order->status === 'paid' ? '#10b981' : '#eab308' }};">
+                                {{ strtoupper($order->status) }}
+                            </span>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="opacity: 0.5; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.5px;">ACQUISITION VALUE</span>
+                        <span style="font-weight: 900; font-family: 'Outfit'; font-size: 1.1rem; color: var(--primary);">${{ number_format($ownerSubtotal, 2) }}</span>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @media (min-width: 769px) {
+            .desktop-only { display: block !important; }
+            .mobile-only { display: none !important; }
+        }
+        @media (max-width: 768px) {
+            .desktop-only { display: none !important; }
+            .mobile-only { display: block !important; }
+        }
+    </style>
 </section>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

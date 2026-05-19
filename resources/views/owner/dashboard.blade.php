@@ -16,7 +16,7 @@
     </div>
     
     <!-- Primary Telemetry Matrix -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 3rem; margin-bottom: 6rem;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(265px, 1fr)); gap: clamp(1rem, 2.5vw, 3rem); margin-bottom: 6rem;">
         <div class="glass-card" style="padding: 3rem; position: relative; overflow: hidden; border-radius: 40px;">
             <div style="position: absolute; top: -30px; right: -30px; width: 150px; height: 150px; background: var(--primary); opacity: 0.1; filter: blur(50px); border-radius: 50%;"></div>
             <div style="opacity: 0.5; font-size: 0.8rem; font-weight: 900; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 2rem;">HARDWARE INVENTORY</div>
@@ -49,7 +49,7 @@
     </div>
 
     <!-- Operations & Logistics -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 4rem;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(285px, 1fr)); gap: clamp(1.5rem, 3.5vw, 4rem);">
         <!-- Recent Logistics Feed -->
         <div class="glass-card" style="padding: clamp(1.5rem, 5vw, 4rem); border-radius: 48px;">
             <div style="margin-bottom: 4rem;" class="flex-wrap-md">
@@ -59,6 +59,15 @@
             
             <div style="display: flex; flex-direction: column; gap: 2rem;">
                 @forelse($recentOrders as $order)
+                @php
+                    $storeId = Auth::user()->store_id;
+                    $ownerItems = $order->items->filter(function($item) use ($storeId) {
+                        return $item->product->store_id == $storeId;
+                    });
+                    $ownerSubtotal = $ownerItems->sum(function($item) {
+                        return $item->price * $item->quantity;
+                    });
+                @endphp
                 <div class="glass" style="padding: 2rem 2.5rem; border-radius: 28px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1.5rem; transition: 0.3s; cursor: default;" onmouseover="this.style.background='rgba(255,255,255,0.03)'" onmouseout="this.style.background='transparent'">
                     <div style="display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;">
                         <div style="width: 56px; height: 56px; background: rgba(255,255,255,0.05); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: var(--primary); font-size: 1.1rem; border: 1px solid var(--glass-border);">
@@ -70,7 +79,7 @@
                         </div>
                     </div>
                     <div style="text-align: right; min-width: 100px;">
-                        <div style="font-weight: 900; font-family: 'Outfit'; color: var(--primary); font-size: 1.4rem; letter-spacing: -1px;">${{ number_format($order->total_amount, 2) }}</div>
+                        <div style="font-weight: 900; font-family: 'Outfit'; color: var(--primary); font-size: 1.4rem; letter-spacing: -1px;">${{ number_format($ownerSubtotal, 2) }}</div>
                         <span style="display: inline-block; padding: 0.3rem 1rem; border-radius: 50px; font-size: 0.7rem; font-weight: 900; margin-top: 0.6rem; border: 1px solid {{ $order->status === 'paid' ? '#10b981' : '#f59e0b' }}; color: {{ $order->status === 'paid' ? '#10b981' : '#f59e0b' }};">
                             {{ strtoupper($order->status) }}
                         </span>

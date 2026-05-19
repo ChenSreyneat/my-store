@@ -14,7 +14,8 @@
         </div>
     </div>
 
-    <div class="glass-card" style="padding: 0; overflow: hidden; border-radius: 40px;">
+    <!-- Desktop Table View -->
+    <div class="glass-card desktop-only" style="padding: 0; overflow: hidden; border-radius: 40px; display: none;">
         <div class="table-container">
             <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 900px;">
                 <thead>
@@ -70,5 +71,65 @@
             </table>
         </div>
     </div>
+
+    <!-- Mobile Stacked Card View -->
+    <div class="mobile-only" style="display: none;">
+        <div style="display: flex; flex-direction: column; gap: 2rem;">
+            @forelse($users as $user)
+            <div class="glass-card" style="padding: 2.5rem; border-radius: 32px; position: relative;">
+                <div style="display: flex; align-items: center; gap: 1.2rem; margin-bottom: 2rem;">
+                    @if($user->profile_image)
+                        <img src="{{ asset('storage/'.$user->profile_image) }}" style="width: 55px; height: 55px; border-radius: 16px; object-fit: cover;">
+                    @else
+                        <div style="width: 55px; height: 55px; background: var(--primary); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 1.2rem;">
+                            {{ substr($user->name, 0, 1) }}
+                        </div>
+                    @endif
+                    <div>
+                        <div style="font-weight: 900; font-size: 1.2rem; line-height: 1.2; margin-bottom: 0.3rem;">{{ $user->name }}</div>
+                        <div style="font-size: 0.8rem; opacity: 0.5; font-weight: 600; word-break: break-all;">{{ $user->email }}</div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 1.5rem; border-top: 1px solid var(--glass-border); margin-bottom: 1.5rem;">
+                    <span style="opacity: 0.5; font-size: 0.75rem; font-weight: 800; letter-spacing: 1px;">ACQUISITIONS</span>
+                    <div class="glass" style="display: inline-flex; align-items: center; gap: 0.8rem; padding: 0.4rem 0.8rem; border-radius: 10px; border-color: rgba(99, 102, 241, 0.2);">
+                        <span style="font-weight: 900; color: var(--primary);">{{ $user->orders_count }}</span>
+                        <span style="font-size: 0.65rem; font-weight: 800; opacity: 0.6; letter-spacing: 0.5px;">ORDERS</span>
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--glass-border);">
+                    <span style="opacity: 0.5; font-size: 0.75rem; font-weight: 800; letter-spacing: 1px;">CONTACT LOGISTICS</span>
+                    <div style="font-weight: 800; font-size: 0.95rem;">{{ $user->phone ?? 'N/A' }}</div>
+                    <div style="font-size: 0.85rem; opacity: 0.5; font-weight: 600; line-height: 1.4;">{{ $user->address ?? 'No Target Address' }}</div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="opacity: 0.4; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.5px;">JOINED</span>
+                    <div style="text-align: right;">
+                        <div style="font-weight: 800; opacity: 0.8; font-size: 0.9rem;">{{ $user->created_at->format('M d, Y') }}</div>
+                        <div style="font-size: 0.75rem; opacity: 0.4; font-weight: 800;">{{ $user->created_at->diffForHumans() }}</div>
+                    </div>
+                </div>
+            </div>
+            @empty
+            <div class="glass-card" style="padding: 5rem 3rem; text-align: center; opacity: 0.4;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 1.5rem;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+                <div style="font-weight: 800; font-size: 0.85rem; letter-spacing: 1px;">NO CUSTOMER DATA RECORDED</div>
+            </div>
+            @endforelse
+        </div>
+    </div>
+
+    <style>
+        @media (min-width: 769px) {
+            .desktop-only { display: block !important; }
+            .mobile-only { display: none !important; }
+        }
+        @media (max-width: 768px) {
+            .desktop-only { display: none !important; }
+            .mobile-only { display: block !important; }
+        }
 </section>
 @endsection

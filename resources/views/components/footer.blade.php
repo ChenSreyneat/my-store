@@ -4,7 +4,6 @@
             <!-- Brand Column -->
             <div>
                 <a href="{{ route('home') }}" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none; margin-bottom: 1.5rem;">
-                    <div style="width: 40px; height: 40px; background: var(--text-gradient); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 1.2rem;">E</div>
                     <span class="text-gradient" style="font-size: 1.4rem; font-family: 'Outfit';">ElitePC</span>
                 </a>
                 <p style="opacity: 0.6; font-size: 0.95rem; line-height: 1.8;">

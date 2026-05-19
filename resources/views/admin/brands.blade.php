@@ -14,24 +14,26 @@
             <h3 style="margin-bottom: 2rem; font-weight: 800;">
                 {{ $editingBrand ? 'Update Brand' : 'Register New Brand' }}
             </h3>
-            <form action="{{ $editingBrand ? route('admin.brands.update', $editingBrand->id) : route('admin.brands.store') }}" method="POST" class="dynamic-form" style="display: grid; grid-template-columns: 1fr 2fr auto auto; gap: 2rem; align-items: end;">
+            <form action="{{ $editingBrand ? route('admin.brands.update', $editingBrand->id) : route('admin.brands.store') }}" method="POST" class="dynamic-form form-grid-admin" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2rem; align-items: end;">
                 @csrf
                 @if($editingBrand) @method('PUT') @endif
                 
                 <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                     <label style="font-weight: 700; opacity: 0.7;">Brand Name</label>
-                    <input type="text" name="name" value="{{ $editingBrand->name ?? '' }}" required placeholder="e.g. NVIDIA" style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 1rem; border-radius: 12px; color: white; width: 100%;">
+                    <input type="text" name="name" value="{{ $editingBrand->name ?? '' }}" required placeholder="e.g. NVIDIA" style="background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 1rem; border-radius: 12px; color: var(--text); width: 100%;">
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                     <label style="font-weight: 700; opacity: 0.7;">Official Website (Optional)</label>
-                    <input type="url" name="website" value="{{ $editingBrand->website ?? '' }}" placeholder="https://..." style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 1rem; border-radius: 12px; color: white; width: 100%;">
+                    <input type="url" name="website" value="{{ $editingBrand->website ?? '' }}" placeholder="https://..." style="background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 1rem; border-radius: 12px; color: var(--text); width: 100%;">
                 </div>
-                <button type="submit" class="btn btn-primary" style="padding: 1rem 2rem;">
-                    {{ $editingBrand ? 'Save Changes' : 'Add Brand' }}
-                </button>
-                @if($editingBrand)
-                    <a href="{{ route('admin.brands') }}" class="btn btn-outline" style="padding: 1rem 2rem; display: flex; align-items: center; justify-content: center;">Cancel</a>
-                @endif
+                <div style="display: flex; gap: 1rem;">
+                    <button type="submit" class="btn btn-primary" style="padding: 1rem 2rem; flex: 1;">
+                        {{ $editingBrand ? 'Save Changes' : 'Add Brand' }}
+                    </button>
+                    @if($editingBrand)
+                        <a href="{{ route('admin.brands') }}" class="btn btn-outline" style="padding: 1rem 2rem; display: flex; align-items: center; justify-content: center; flex: 1; color: var(--text);">Cancel</a>
+                    @endif
+                </div>
             </form>
         </div>
 

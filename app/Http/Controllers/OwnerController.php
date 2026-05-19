@@ -24,7 +24,7 @@ class OwnerController extends Controller
         ];
         $recentOrders = Order::whereHas('items.product', function($q) use ($store) {
             $q->where('store_id', $store->id);
-        })->with('user')->latest()->limit(5)->get();
+        })->with(['user', 'items.product'])->latest()->limit(5)->get();
 
         return view('owner.dashboard', compact('stats', 'recentOrders'));
     }
@@ -102,7 +102,13 @@ class OwnerController extends Controller
             $q->where('store_id', $store->id);
         })->where('status', 'paid')->with(['items.product', 'user'])->latest()->get();
 
-        $totalEarnings = $orders->sum('total_amount');
+        $totalEarnings = \App\Models\OrderItem::whereHas('product', function($q) use ($store) {
+                $q->where('store_id', $store->id);
+            })
+            ->whereHas('order', function($q) {
+                $q->where('status', 'paid');
+            })
+            ->sum(\DB::raw('price * quantity'));
         
         return view('owner.payments', compact('orders', 'totalEarnings'));
     }
@@ -211,11 +217,13 @@ class OwnerController extends Controller
         $store = Auth::user()->store;
 
         // Store Monthly Revenue
-        $monthlyRevenue = Order::whereHas('items.product', function($q) use ($store) {
+        $monthlyRevenue = \App\Models\OrderItem::whereHas('product', function($q) use ($store) {
                 $q->where('store_id', $store->id);
             })
-            ->where('status', 'paid')
-            ->selectRaw('SUM(total_amount) as total, MONTHNAME(created_at) as month, MONTH(created_at) as month_num')
+            ->whereHas('order', function($q) {
+                $q->where('status', 'paid');
+            })
+            ->selectRaw('SUM(price * quantity) as total, MONTHNAME(created_at) as month, MONTH(created_at) as month_num')
             ->where('created_at', '>=', now()->subMonths(6))
             ->groupBy('month', 'month_num')
             ->orderBy('month_num')
@@ -235,7 +243,7 @@ class OwnerController extends Controller
         // Recent Activity
         $recentOrders = Order::whereHas('items.product', function($q) use ($store) {
                 $q->where('store_id', $store->id);
-            })->latest()->limit(10)->get();
+            })->with(['user', 'items.product'])->latest()->limit(10)->get();
 
         return view('owner.reports', compact('monthlyRevenue', 'topProducts', 'recentOrders'));
     }

@@ -12,18 +12,18 @@
     <!-- Create/Update Form -->
     <div class="glass-card" style="padding: 3rem; margin-bottom: 4rem; border-color: var(--primary);">
         <h3 style="margin-bottom: 2.5rem; font-weight: 900; font-family: 'Outfit';">{{ $editingType ? 'Update Classification' : 'Define New Classification' }}</h3>
-        <form action="{{ $editingType ? route('admin.product_types.update', $editingType->id) : route('admin.product_types.store') }}" method="POST" style="display: flex; gap: 2rem; align-items: flex-end;">
+        <form action="{{ $editingType ? route('admin.product_types.update', $editingType->id) : route('admin.product_types.store') }}" method="POST" style="display: flex; gap: 2rem; align-items: flex-end; flex-wrap: wrap;">
             @csrf
             @if($editingType) @method('PUT') @endif
-            <div style="flex: 1; display: flex; flex-direction: column; gap: 0.8rem;">
+            <div style="flex: 1; min-width: 280px; display: flex; flex-direction: column; gap: 0.8rem;">
                 <label style="font-size: 0.75rem; font-weight: 800; letter-spacing: 1.5px; opacity: 0.6;">CLASSIFICATION IDENTITY</label>
-                <input type="text" name="name" value="{{ $editingType->name ?? '' }}" required placeholder="e.g. Workstation" style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 1.2rem; border-radius: 16px; color: white; width: 100%; outline: none; transition: 0.3s;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--glass-border)'">
+                <input type="text" name="name" value="{{ $editingType->name ?? '' }}" required placeholder="e.g. Workstation" style="background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 1.2rem; border-radius: 16px; color: var(--text); width: 100%; outline: none; transition: 0.3s;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--glass-border)'">
             </div>
             <button type="submit" class="btn btn-primary" style="padding: 1.2rem 3rem; border-radius: 16px; font-weight: 800;">
                 {{ $editingType ? 'Sync Changes' : 'Register Type' }}
             </button>
             @if($editingType)
-                <a href="{{ route('admin.product_types') }}" class="btn" style="background: var(--glass-bg); padding: 1.2rem 3rem; border-radius: 16px;">Abort</a>
+                <a href="{{ route('admin.product_types') }}" class="btn" style="background: var(--glass-bg); padding: 1.2rem 3rem; border-radius: 16px; color: var(--text);">Abort</a>
             @endif
         </form>
     </div>

@@ -14,21 +14,21 @@
             <h3 style="margin-bottom: 2rem; font-weight: 800;">
                 {{ $editingStore ? 'Update Store' : 'Launch New Store' }}
             </h3>
-            <form action="{{ $editingStore ? route('admin.stores.update', $editingStore->id) : route('admin.stores.store') }}" method="POST" class="dynamic-form" style="display: grid; grid-template-columns: 1fr 1fr 1fr auto auto; gap: 2rem; align-items: end;">
+            <form action="{{ $editingStore ? route('admin.stores.update', $editingStore->id) : route('admin.stores.store') }}" method="POST" class="dynamic-form form-grid-admin" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2rem; align-items: end;">
                 @csrf
                 @if($editingStore) @method('PUT') @endif
                 
                 <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                     <label style="font-weight: 700; opacity: 0.7;">Store Name</label>
-                    <input type="text" name="name" value="{{ $editingStore->name ?? '' }}" required placeholder="e.g. ElitePC Central" style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 1rem; border-radius: 12px; color: white; width: 100%;">
+                    <input type="text" name="name" value="{{ $editingStore->name ?? '' }}" required placeholder="e.g. ElitePC Central" style="background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 1rem; border-radius: 12px; color: var(--text); width: 100%;">
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                     <label style="font-weight: 700; opacity: 0.7;">Business Email</label>
-                    <input type="email" name="email" value="{{ $editingStore->email ?? '' }}" required placeholder="store@example.com" style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 1rem; border-radius: 12px; color: white; width: 100%;">
+                    <input type="email" name="email" value="{{ $editingStore->email ?? '' }}" required placeholder="store@example.com" style="background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 1rem; border-radius: 12px; color: var(--text); width: 100%;">
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                     <label style="font-weight: 700; opacity: 0.7;">Promote Owner</label>
-                    <select name="owner_id" required style="background: var(--dark); border: 1px solid var(--glass-border); padding: 1rem; border-radius: 12px; color: white; width: 100%;">
+                    <select name="owner_id" required style="background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 1rem; border-radius: 12px; color: var(--text); width: 100%;">
                         @if($editingStore && $editingStore->owner)
                             <option value="{{ $editingStore->owner->id }}">{{ $editingStore->owner->name }} (Current)</option>
                         @endif
@@ -37,12 +37,14 @@
                         @endforeach
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary" style="padding: 1rem 2rem;">
-                    {{ $editingStore ? 'Save Changes' : 'Launch Store' }}
-                </button>
-                @if($editingStore)
-                    <a href="{{ route('admin.stores') }}" class="btn btn-outline" style="padding: 1rem 2rem; display: flex; align-items: center; justify-content: center;">Cancel</a>
-                @endif
+                <div style="display: flex; gap: 1rem;">
+                    <button type="submit" class="btn btn-primary" style="padding: 1rem 2rem; flex: 1;">
+                        {{ $editingStore ? 'Save Changes' : 'Launch Store' }}
+                    </button>
+                    @if($editingStore)
+                        <a href="{{ route('admin.stores') }}" class="btn btn-outline" style="padding: 1rem 2rem; display: flex; align-items: center; justify-content: center; flex: 1; color: var(--text);">Cancel</a>
+                    @endif
+                </div>
             </form>
         </div>
 

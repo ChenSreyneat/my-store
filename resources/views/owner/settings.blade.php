@@ -15,7 +15,7 @@
         </div>
     </div>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 4rem;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(285px, 1fr)); gap: clamp(1.5rem, 3.5vw, 4rem);">
         <!-- Business Intelligence Matrix -->
         <div class="glass-card" style="padding: 4rem; border-radius: 48px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4rem;">
@@ -48,7 +48,7 @@
 
                 <div style="display: flex; flex-direction: column; gap: 0.8rem;">
                     <label style="font-size: 0.75rem; font-weight: 800; letter-spacing: 1.5px; opacity: 0.6; color: var(--primary);">LINKED BAKONG ACCOUNT (FINANCIAL NODE)</label>
-                    <select name="payment_account_id" style="width: 100%; background: var(--dark); border: 1px solid var(--primary); padding: 1.2rem; border-radius: 16px; color: white; font-weight: 700;">
+                    <select name="payment_account_id" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--primary); padding: 1.2rem; border-radius: 16px; color: var(--text); font-weight: 700; cursor: pointer;">
                         <option value="">Select Payment Protocol</option>
                         @foreach($paymentAccounts as $account)
                         <option value="{{ $account->id }}" {{ $store->payment_account_id == $account->id ? 'selected' : '' }}>

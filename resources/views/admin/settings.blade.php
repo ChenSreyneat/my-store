@@ -9,7 +9,7 @@
         <p style="opacity: 0.5;">Global configuration and personal account management.</p>
     </div>
 
-    <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 3rem;" class="dynamic-form">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 3rem;" class="dynamic-form">
         <!-- Personal Admin Profile -->
         <div class="glass" style="padding: 3.5rem; border-radius: 40px;">
             <h3 style="margin-bottom: 2rem; font-weight: 800;">My Administrative Account</h3>
@@ -19,14 +19,14 @@
                 
                 <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                     <label style="font-weight: 700; opacity: 0.7;">Full Name</label>
-                    <input type="text" name="name" value="{{ old('name', Auth::user()->name) }}" required style="background: rgba(255,255,255,0.05); border: 1px solid {{ $errors->has('name') ? '#ef4444' : 'var(--glass-border)' }}; padding: 1rem; border-radius: 12px; color: white;">
+                    <input type="text" name="name" value="{{ old('name', Auth::user()->name) }}" required style="background: var(--glass-bg); border: 1px solid {{ $errors->has('name') ? '#ef4444' : 'var(--glass-border)' }}; padding: 1rem; border-radius: 12px; color: var(--text);">
                     @error('name')
                         <span style="color: #ef4444; font-size: 0.75rem; font-weight: 700; margin-top: 0.5rem;">{{ $message }}</span>
                     @enderror
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                     <label style="font-weight: 700; opacity: 0.7;">Administrative Email</label>
-                    <input type="email" name="email" value="{{ old('email', Auth::user()->email) }}" required style="background: rgba(255,255,255,0.05); border: 1px solid {{ $errors->has('email') ? '#ef4444' : 'var(--glass-border)' }}; padding: 1rem; border-radius: 12px; color: white;">
+                    <input type="email" name="email" value="{{ old('email', Auth::user()->email) }}" required style="background: var(--glass-bg); border: 1px solid {{ $errors->has('email') ? '#ef4444' : 'var(--glass-border)' }}; padding: 1rem; border-radius: 12px; color: var(--text);">
                     @error('email')
                         <span style="color: #ef4444; font-size: 0.75rem; font-weight: 700; margin-top: 0.5rem;">{{ $message }}</span>
                     @enderror

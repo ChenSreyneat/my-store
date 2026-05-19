@@ -57,14 +57,31 @@ class AuthController extends Controller
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|unique:users',
             'password' => 'required|confirmed|min:8',
+            'account_type' => 'required|in:user,owner',
         ]);
+
+        $storeId = null;
+
+        if ($request->account_type === 'owner') {
+            $store = \App\Models\Store::create([
+                'name' => $request->name . "'s Store",
+                'email' => $request->email,
+                'is_active' => true,
+            ]);
+            $storeId = $store->id;
+        }
 
         $user = User::create([
             'name'     => $request->name,
             'email'    => $request->email,
             'password' => Hash::make($request->password),
-            'role'     => 'user',
+            'role'     => $request->account_type,
+            'store_id' => $storeId,
         ]);
+
+        if ($user->isOwner()) {
+            return redirect()->route('login')->with('success', 'Store Owner account created successfully! Please sign in.');
+        }
 
         Auth::login($user);
         return redirect()->route('home');

@@ -196,11 +196,14 @@
                 <div style="width: 100%; height: 160px; display: flex; align-items: center; justify-content: center; overflow: hidden; transition: 0.4s;">
                     @php
                         $catImages = [
-                            'laptops' => 'https://images.unsplash.com/photo-1593642632823-8f785ba67e45?auto=format&fit=crop&q=80&w=300',
-                            'gpu' => 'https://images.unsplash.com/photo-1624705002806-5d72df19c3ad?auto=format&fit=crop&q=80&w=300',
-                            'monitors' => 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&q=80&w=300',
-                            'desktops' => 'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&q=80&w=300',
-                            'peripherals' => 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&q=80&w=300',
+                            'cooling' => asset('storage/products/Case & Cooling/2.avif'),
+                            'gpu' => asset('storage/products/Grapich cards/3.png'),
+                            'ram' => asset('storage/products/Memory(RAM)/1.jpg'),
+                            'mobo' => asset('storage/products/Mothers boards/1.jpg'),
+                            'cpu' => asset('storage/products/Processors/1.jpg'),
+                            'ssd' => asset('storage/products/Storage/SSD/TechNova.png'),
+                            'hdd' => asset('storage/products/Storage/HDD/2.jpg'),
+                            'computer' => asset('storage/products/Computers/computer.png'),
                         ];
                         $img = $catImages[strtolower($category->slug)] ?? 'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&q=80&w=300';
                     @endphp

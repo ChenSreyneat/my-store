@@ -8,7 +8,7 @@
     <p style="opacity: 0.5;">Managing your store's financial performance and revenue.</p>
 </div>
 
-<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-bottom: 4rem;">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: clamp(1rem, 2vw, 2rem); margin-bottom: 4rem;">
     <div class="glass" style="padding: 2.5rem; border-radius: 24px;">
         <div style="opacity: 0.5; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.5rem;">Total Store Earnings</div>
         <div style="font-size: 2.5rem; font-weight: 800; color: #10b981;">${{ number_format($totalEarnings, 2) }}</div>
@@ -37,10 +37,19 @@
         </thead>
         <tbody>
             @foreach($orders as $order)
+            @php
+                $storeId = Auth::user()->store_id;
+                $ownerItems = $order->items->filter(function($item) use ($storeId) {
+                    return $item->product->store_id == $storeId;
+                });
+                $ownerSubtotal = $ownerItems->sum(function($item) {
+                    return $item->price * $item->quantity;
+                });
+            @endphp
             <tr style="border-bottom: 1px solid var(--glass-border);">
                 <td style="padding: 1.5rem; font-weight: 700;">#EPC-{{ $order->id }}</td>
                 <td style="padding: 1.5rem;">{{ $order->user->name }}</td>
-                <td style="padding: 1.5rem; font-weight: 800; color: #10b981;">+ ${{ number_format($order->total_amount, 2) }}</td>
+                <td style="padding: 1.5rem; font-weight: 800; color: #10b981;">+ ${{ number_format($ownerSubtotal, 2) }}</td>
                 <td style="padding: 1.5rem; opacity: 0.6;">{{ $order->updated_at->format('M d, Y') }}</td>
                 <td style="padding: 1.5rem;">
                     <span style="font-weight: 800; font-size: 0.75rem; color: #10b981;">COMPLETED</span>

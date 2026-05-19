@@ -5,12 +5,12 @@
 @section('content')
 <section style="padding-bottom: 5rem;">
     <!-- Profile Header -->
-    <div style="margin-bottom: 5rem; display: flex; justify-content: space-between; align-items: flex-end;">
+    <div style="margin-bottom: 5rem;" class="flex-wrap-md header-stack">
         <div>
             <h1 style="font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 900; font-family: 'Outfit'; letter-spacing: -2px; line-height: 1; margin-bottom: 1.5rem;">User <span class="text-gradient">Hub</span></h1>
             <p style="opacity: 0.6; font-size: 1.1rem; font-weight: 600;">Architect your identity and secure your performance ecosystem.</p>
         </div>
-        <div class="glass" style="padding: 0.6rem 1.5rem; border-radius: 50px; font-size: 0.8rem; font-weight: 800; color: var(--primary); letter-spacing: 1px; border-color: var(--primary);">
+        <div class="glass" style="padding: 0.6rem 1.5rem; border-radius: 50px; font-size: 0.8rem; font-weight: 800; color: var(--primary); letter-spacing: 1px; border-color: var(--primary); margin-bottom: 0.5rem;">
             STATUS: ACTIVE NODE
         </div>
     </div>
@@ -72,7 +72,7 @@
 
                 <form action="{{ route('profile.update') }}" method="POST" style="display: flex; flex-direction: column; gap: 2.5rem;">
                     @csrf @method('PATCH')
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem;">
+                    <div class="form-row-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem;">
                         <div class="input-group">
                             <label>OPERATIVE NAME</label>
                             <input type="text" name="name" value="{{ old('name', Auth::user()->name) }}" required style="border-color: {{ $errors->has('name') ? '#ef4444' : '' }}">
@@ -152,7 +152,7 @@
                         @enderror
                     </div>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem;">
+                    <div class="form-row-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem;">
                         <div class="input-group">
                             <label>NEW ACCESS KEY</label>
                             <input type="password" name="password" required style="border-color: {{ $errors->has('password') ? '#ef4444' : '' }}">
@@ -229,6 +229,26 @@
         background: rgba(255,255,255,0.05);
         outline: none;
         box-shadow: 0 0 20px rgba(var(--primary-rgb), 0.1);
+    }
+
+    @media (max-width: 992px) {
+        .dynamic-grid {
+            grid-template-columns: 1fr !important;
+            gap: 3rem !important;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .form-row-grid {
+            grid-template-columns: 1fr !important;
+            gap: 1.5rem !important;
+        }
+        .glass-card {
+            padding: 2.5rem !important;
+        }
+        .input-group input, .input-group textarea {
+            padding: 1rem 1.25rem !important;
+        }
     }
 </style>
 

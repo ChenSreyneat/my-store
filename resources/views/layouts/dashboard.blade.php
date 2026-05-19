@@ -357,13 +357,13 @@
             border-radius: var(--radius-md);
         }
 
-        @media (max-width: 1200px) {
+        @media (max-width: 1280px) {
             :root { --sidebar-width: 260px; }
-            .main-wrapper { padding: 2rem; }
-            .search-box { width: 300px; }
+            .main-wrapper { padding: 2rem clamp(1.5rem, 3vw, 3rem); }
+            .search-box { width: 280px; }
         }
 
-        @media (max-width: 1024px) {
+        @media (max-width: 1200px) {
             .sidebar { 
                 transform: translateX(-100%); 
                 transition: var(--transition);
@@ -372,8 +372,8 @@
                 padding: 2rem;
             }
             .sidebar.active { transform: translateX(0); }
-            .main-wrapper { margin-left: 0; padding: 1.5rem; }
-            .top-bar { margin-bottom: 2rem; }
+            .main-wrapper { margin-left: 0; padding: 2rem; }
+            .top-bar { margin-bottom: 2.5rem; }
             .search-box { display: none; }
             .sidebar-overlay {
                 display: none;
@@ -416,6 +416,16 @@
             border-color: var(--primary);
             color: var(--primary);
         }
+
+        /* Native dropdown styling for dark/light themes */
+        select option {
+            background-color: #1a2368;
+            color: #f8fafc;
+        }
+        [data-theme="light"] select option {
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
     </style>
 </head>
 <body>
@@ -426,7 +436,6 @@
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-logo">
-                <img src="/logo.png" alt="ElitePC">
                 <span>ELITE PC</span>
             </div>
 
@@ -579,8 +588,9 @@
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
                     </div>
                     <div class="search-box">
-                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    <input type="text" placeholder="Search orders, products, users...">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        <input type="text" placeholder="Search orders, products, users...">
+                    </div>
                 </div>
 
                 <div class="top-actions">

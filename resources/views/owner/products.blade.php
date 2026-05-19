@@ -38,7 +38,7 @@
             </div>
             <div style="display: flex; flex-direction: column; gap: 0.8rem;">
                 <label style="font-size: 0.75rem; font-weight: 800; letter-spacing: 1.5px; opacity: 0.6;">TAXONOMY (CATEGORY)</label>
-                <select name="category_id" required style="background: var(--dark); border: 1px solid var(--glass-border); padding: 1.2rem; border-radius: 16px; color: white; width: 100%;">
+                <select name="category_id" required style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 1.2rem; border-radius: 16px; color: var(--text); width: 100%; cursor: pointer;">
                     @foreach($categories as $category)
                     <option value="{{ $category->id }}" {{ ($editingProduct && $editingProduct->category_id == $category->id) ? 'selected' : '' }}>{{ $category->name }}</option>
                     @endforeach
@@ -46,7 +46,7 @@
             </div>
             <div style="display: flex; flex-direction: column; gap: 0.8rem;">
                 <label style="font-size: 0.75rem; font-weight: 800; letter-spacing: 1.5px; opacity: 0.6;">MANUFACTURER (BRAND)</label>
-                <select name="brand_id" required style="background: var(--dark); border: 1px solid var(--glass-border); padding: 1.2rem; border-radius: 16px; color: white; width: 100%;">
+                <select name="brand_id" required style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 1.2rem; border-radius: 16px; color: var(--text); width: 100%; cursor: pointer;">
                     @foreach($brands as $brand)
                     <option value="{{ $brand->id }}" {{ ($editingProduct && $editingProduct->brand_id == $brand->id) ? 'selected' : '' }}>{{ $brand->name }}</option>
                     @endforeach
@@ -54,7 +54,7 @@
             </div>
             <div style="display: flex; flex-direction: column; gap: 0.8rem;">
                 <label style="font-size: 0.75rem; font-weight: 800; letter-spacing: 1.5px; opacity: 0.6;">HARDWARE TYPE</label>
-                <select name="product_type_id" required style="background: var(--dark); border: 1px solid var(--glass-border); padding: 1.2rem; border-radius: 16px; color: white; width: 100%;">
+                <select name="product_type_id" required style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 1.2rem; border-radius: 16px; color: var(--text); width: 100%; cursor: pointer;">
                     @foreach($productTypes as $type)
                     <option value="{{ $type->id }}" {{ ($editingProduct && $editingProduct->product_type_id == $type->id) ? 'selected' : '' }}>{{ $type->name }}</option>
                     @endforeach
@@ -75,8 +75,8 @@
         </form>
     </div>
 
-    <!-- Inventory Matrix -->
-    <div class="glass-card" style="padding: 0; border-radius: 40px; overflow: hidden;">
+    <!-- Desktop Table View -->
+    <div class="glass-card desktop-only" style="padding: 0; border-radius: 40px; overflow: hidden; display: none;">
         <div style="padding: 2.5rem 3.5rem; border-bottom: 1px solid var(--glass-border); background: rgba(255,255,255,0.02);">
             <h3 style="font-weight: 900; font-family: 'Outfit'; font-size: 1.5rem; letter-spacing: -0.5px;">Current <span class="text-gradient">Archive</span></h3>
         </div>
@@ -118,6 +118,55 @@
                 @endforeach
             </tbody>
         </table>
+        </div>
     </div>
+
+    <!-- Mobile Stacked Card View -->
+    <div class="mobile-only" style="display: none;">
+        <div style="display: flex; flex-direction: column; gap: 2rem;">
+            @foreach($products as $product)
+            <div class="glass-card" style="padding: 2.5rem; border-radius: 32px; position: relative; {{ ($editingProduct && $editingProduct->id == $product->id) ? 'border-color: var(--primary); background: rgba(var(--primary-rgb), 0.05);' : '' }}">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem;">
+                    <div>
+                        <div style="font-weight: 900; font-size: 1.25rem; letter-spacing: -0.5px; line-height: 1.2; margin-bottom: 0.3rem;">{{ $product->name }}</div>
+                        <div style="font-size: 0.75rem; opacity: 0.4; font-weight: 800;">{{ $product->brand->name ?? 'Generic' }} | {{ $product->productType->name ?? 'System' }}</div>
+                    </div>
+                    <span style="font-size: 0.85rem; font-weight: 800; opacity: 0.8; color: var(--primary); padding: 0.4rem 1rem; border-radius: 10px; background: rgba(var(--primary-rgb), 0.08);">
+                        {{ $product->category->name }}
+                    </span>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 0; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); margin-bottom: 2rem;">
+                    <div>
+                        <div style="opacity: 0.5; font-size: 0.75rem; font-weight: 800; letter-spacing: 1px; margin-bottom: 0.3rem;">STOCK CAPACITY</div>
+                        <span style="font-weight: 900; font-family: 'Outfit'; font-size: 1.2rem; color: {{ $product->stock < 5 ? '#ef4444' : '#10b981' }}">{{ $product->stock }} UNITS</span>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="opacity: 0.5; font-size: 0.75rem; font-weight: 800; letter-spacing: 1px; margin-bottom: 0.3rem;">VALUATION</div>
+                        <span style="font-weight: 900; font-family: 'Outfit'; font-size: 1.3rem; color: var(--primary);">${{ number_format($product->price, 2) }}</span>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 1rem; justify-content: stretch;">
+                    <a href="{{ route('owner.products', ['edit' => $product->id]) }}" class="glass" style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 1.1rem; border-radius: 16px; font-size: 0.85rem; font-weight: 900; text-decoration: none; color: var(--primary); border-color: rgba(99, 102, 241, 0.3); background: rgba(99, 102, 241, 0.02);">CALIBRATE</a>
+                    <form action="{{ route('owner.products.destroy', $product->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to remove this hardware node?')" style="flex: 1; display: flex;">
+                        @csrf @method('DELETE')
+                        <button type="submit" class="glass" style="width: 100%; display: flex; align-items: center; justify-content: center; padding: 1.1rem; border-radius: 16px; font-size: 0.85rem; font-weight: 900; color: #ef4444; border-color: rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.02); cursor: pointer;">PURGE</button>
+                    </form>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+
+    <style>
+        @media (min-width: 769px) {
+            .desktop-only { display: block !important; }
+            .mobile-only { display: none !important; }
+        }
+        @media (max-width: 768px) {
+            .desktop-only { display: none !important; }
+            .mobile-only { display: block !important; }
+        }
 </section>
 @endsection
