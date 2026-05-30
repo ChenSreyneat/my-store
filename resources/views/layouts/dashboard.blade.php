@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,45 +13,50 @@
 
     <style>
         :root {
-            --primary: #6366f1;
-            --primary-glow: rgba(99, 102, 241, 0.5);
-            --bg: #1A2368;
-            --sidebar-bg: rgba(26, 35, 104, 0.85);
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --text: #f8fafc;
-            --text-dim: #94a3b8;
+            --primary: #6366f1;                          /* Indigo Accent */
+            --primary-hover: #4f46e5;                    /* Indigo Hover State */
+            --primary-glow: rgba(99, 102, 241, 0.5);     /* Indigo Halo Accent */
+            --secondary: #ec4899;                        /* Hot Pink Highlight */
+            --bg: #f8fafc;                               /* Off-white Slate Backdrop */
+            --text: #0f172a;                             /* Charcoal Dark Text */
+            --text-dim: #64748b;                         /* Cool Gray Muted Text */
+            --title-color: #4f46e5;                      /* Deep Indigo for Light Mode */
+            --glass-bg: rgba(15, 23, 42, 0.04);          /* Light Glass Surface */
+            --glass-border: rgba(15, 23, 42, 0.1);       /* Light Glass Edge */
+            --glass-blur: blur(12px);                    /* Frost Backdrop Filter */
+            --card-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.08); /* Light Shadow Depth */
+            --text-gradient: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
+            --sidebar-bg: rgba(255, 255, 255, 0.8);
             --sidebar-width: 300px;
             --topbar-height: 80px;
-            --radius-xl: 32px;
-            --radius-lg: 24px;
+            --radius-xl: 24px;
+            --radius-lg: 20px;
             --radius-md: 16px;
+            --radius-sm: 12px;
             --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        [data-theme="light"] {
-            --bg: #f8fafc;
-            --sidebar-bg: rgba(255, 255, 255, 0.8);
-            --glass-bg: rgba(15, 23, 42, 0.03);
-            --glass-border: rgba(15, 23, 42, 0.08);
-            --text: #0f172a;
-            --text-dim: #64748b;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
-        /* Global Zero-Scrollbar Architecture */
-        * {
-            scrollbar-width: none !important; /* Firefox */
-            -ms-overflow-style: none !important; /* IE/Edge */
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
         }
-        *::-webkit-scrollbar {
-            display: none !important; /* Chrome/Safari/Opera */
+        ::-webkit-scrollbar-track {
+            background: #10163f;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-hover);
         }
 
         body {
@@ -59,10 +64,35 @@
             color: var(--text);
             overflow-x: hidden;
             transition: var(--transition);
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) #10163f;
         }
 
         h1, h2, h3, .font-outfit {
             font-family: 'Outfit', sans-serif;
+        }
+
+        /* Dashboard Typography Scale */
+        h1 {
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            font-weight: 700;
+            letter-spacing: -1px;
+            color: var(--title-color);
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--title-color);
+        }
+
+        h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text);
+            line-height: 1.4;
         }
 
         /* Dashboard Layout */
@@ -71,38 +101,45 @@
             min-height: 100vh;
         }
 
-        /* Sidebar Design */
         .sidebar {
             width: var(--sidebar-width);
             background: var(--sidebar-bg);
             backdrop-filter: blur(20px);
             border-right: 1px solid var(--glass-border);
-            padding: 2.5rem;
+            padding: 1.8rem;
             display: flex;
             flex-direction: column;
             position: fixed;
             height: 100vh;
             z-index: 100;
-            overflow-y: auto;
-            overflow-x: hidden;
+            overflow: hidden; /* Completely disable scrolling */
+        }
+
+        /* Hide scrollbars for the sidebar navigation links container */
+        .sidebar-nav {
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+        }
+        .sidebar-nav::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
         }
 
         .sidebar-logo {
-            margin-bottom: 4rem;
+            margin-bottom: 1.5rem;
             display: flex;
             align-items: center;
             gap: 1rem;
         }
 
         .sidebar-logo img {
-            width: 45px;
-            height: 45px;
+            width: 40px;
+            height: 40px;
             filter: drop-shadow(0 0 10px var(--primary-glow));
         }
 
         .sidebar-logo span {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 900;
             letter-spacing: -1px;
             background: linear-gradient(to right, #fff, var(--primary));
@@ -111,50 +148,50 @@
         }
 
         .nav-group {
-            margin-bottom: 2.5rem;
+            margin-bottom: 1.25rem;
         }
 
         .nav-label {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             text-transform: uppercase;
             font-weight: 800;
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
             color: var(--text-dim);
-            margin-bottom: 1.5rem;
-            padding-left: 1rem;
+            margin-bottom: 0.8rem;
+            padding-left: 0.8rem;
         }
 
         .sidebar-link {
             display: flex;
             align-items: center;
-            gap: 1rem;
-            padding: 1rem 1.2rem;
+            gap: 0.8rem;
+            padding: 0.7rem 0.9rem;
             color: var(--text-dim);
             text-decoration: none;
             border-radius: var(--radius-md);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.3rem;
             transition: var(--transition);
             font-weight: 600;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             position: relative;
         }
 
         .sidebar-link svg {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             stroke-width: 2;
         }
 
         .sidebar-link:hover {
             color: var(--text);
             background: var(--glass-bg);
-            transform: translateX(5px);
+            transform: translateX(3px);
         }
 
         .sidebar-link.active {
             color: #fff;
             background: var(--primary);
-            box-shadow: 0 10px 20px -5px var(--primary-glow);
+            box-shadow: 0 8px 16px -4px var(--primary-glow);
         }
 
         /* Main Content */
@@ -171,32 +208,59 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 4rem;
+            position: relative;
+            z-index: 95;
         }
 
         .search-box {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            padding: 0.8rem 1.5rem;
-            border-radius: 50px;
+            background: #ffffff;
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            padding: 0.6rem 1.25rem;
+            border-radius: 100px;
             display: flex;
             align-items: center;
-            gap: 1rem;
-            width: 400px;
+            gap: 0.75rem;
+            width: 320px;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.02);
             transition: var(--transition);
         }
 
         .search-box:focus-within {
             border-color: var(--primary);
-            box-shadow: 0 0 0 4px var(--primary-glow);
+            box-shadow: 0 0 0 4px var(--primary-glow), 0 4px 12px rgba(15, 23, 42, 0.02);
         }
 
-        .search-box input {
-            background: none;
-            border: none;
-            color: var(--text);
-            width: 100%;
-            outline: none;
-            font-size: 0.9rem;
+        .search-box input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]) {
+            background: transparent !important;
+            border: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            color: var(--text) !important;
+            width: 100% !important;
+            outline: none !important;
+            font-size: 0.88rem !important;
+            font-weight: 500 !important;
+        }
+
+        .search-box input::placeholder {
+            color: var(--text-dim);
+            opacity: 0.8;
+        }
+
+        .search-shortcut {
+            background: rgba(15, 23, 42, 0.05);
+            color: var(--text-dim);
+            padding: 0.25rem 0.5rem;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .top-actions {
@@ -205,24 +269,7 @@
             gap: 2rem;
         }
 
-        .theme-toggle {
-            width: 45px;
-            height: 45px;
-            border-radius: 12px;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: var(--transition);
-        }
 
-        .theme-toggle:hover {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
 
         .user-pill {
             display: flex;
@@ -343,11 +390,21 @@
         .flex-wrap-md { display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: space-between; align-items: flex-end; }
         .grid-responsive { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
         .form-grid-admin { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; align-items: end; }
+        .grid-split { display: grid; grid-template-columns: 2fr 1.2fr; gap: 3rem; }
+        @media (max-width: 1024px) {
+            .grid-split { grid-template-columns: 1fr; gap: 2rem; }
+        }
         
         @media (max-width: 768px) {
             .flex-wrap-md { flex-direction: column; align-items: flex-start; gap: 1rem; }
             .form-grid-admin { grid-template-columns: 1fr; }
             .header-stack { flex-direction: column; align-items: flex-start !important; gap: 1.5rem !important; }
+            .glass-card { padding: 2rem !important; border-radius: 32px !important; }
+            .glass { padding: 2rem !important; border-radius: 32px !important; }
+            .table-container table th,
+            .table-container table td {
+                padding: 1rem 1.25rem !important;
+            }
         }
 
         .table-container {
@@ -394,9 +451,14 @@
             .user-info { display: none; }
             .user-pill { padding: 0.5rem; }
             .top-actions { gap: 0.8rem; }
-            .glass-card { padding: 1.5rem; border-radius: 24px; }
+            .glass-card { padding: 1.25rem !important; border-radius: 20px !important; }
+            .glass { padding: 1.25rem !important; border-radius: 20px !important; }
             .top-bar { align-items: center; }
             h1 { font-size: 2.2rem !important; letter-spacing: -1px !important; }
+            .table-container table th,
+            .table-container table td {
+                padding: 0.75rem 1rem !important;
+            }
         }
 
         .mobile-toggle {
@@ -417,14 +479,162 @@
             color: var(--primary);
         }
 
-        /* Native dropdown styling for dark/light themes */
         select option {
-            background-color: #1a2368;
-            color: #f8fafc;
-        }
-        [data-theme="light"] select option {
             background-color: #f8fafc;
             color: #0f172a;
+        }
+
+        /* Prevent nested container double-margins and alignment shift in dashboard */
+        .main-wrapper .container {
+            max-width: 100% !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        /* Restrict dashboard content width to 1200px */
+        .dashboard-content {
+            max-width: 1200px;
+            width: 100%;
+            margin-right: auto;
+        }
+
+        /* Clean and professional form controls */
+        input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]),
+        textarea,
+        select {
+            width: 100% !important;
+            background: var(--glass-bg) !important;
+            border: 1px solid var(--glass-border) !important;
+            padding: 0.8rem 1.2rem !important;
+            border-radius: 12px !important;
+            color: var(--text) !important;
+            font-size: 0.95rem !important;
+            font-weight: 500 !important;
+            transition: var(--transition) !important;
+            outline: none !important;
+            box-sizing: border-box !important;
+        }
+
+        input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):focus,
+        textarea:focus,
+        select:focus {
+            border-color: var(--primary) !important;
+            background: rgba(255, 255, 255, 0.08) !important;
+            box-shadow: 0 0 0 4px var(--primary-glow) !important;
+        }
+
+        label {
+            display: block !important;
+            font-weight: 800 !important;
+            font-size: 0.75rem !important;
+            text-transform: uppercase !important;
+            letter-spacing: 1.5px !important;
+            margin-bottom: 0.8rem !important;
+            opacity: 0.6 !important;
+        }
+
+        /* Clean outline button styles */
+        .btn-outline {
+            background: transparent !important;
+            border: 1px solid var(--glass-border) !important;
+            color: var(--text) !important;
+        }
+
+        .btn-outline:hover {
+            background: var(--glass-bg) !important;
+            border-color: var(--primary) !important;
+            transform: translateY(-2px) !important;
+            color: var(--text) !important;
+        }
+
+        /* Laravel Pagination Styling */
+        nav[role="navigation"] {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem 0;
+            width: 100%;
+        }
+
+        nav[role="navigation"] .flex-1.justify-between {
+            display: none !important;
+        }
+
+        nav[role="navigation"] .hidden {
+            display: flex !important;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 640px) {
+            nav[role="navigation"] .hidden {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+
+        nav[role="navigation"] p {
+            font-size: 0.9rem;
+            opacity: 0.6;
+            font-weight: 500;
+        }
+
+        nav[role="navigation"] p span {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        nav[role="navigation"] span.relative.z-0 {
+            display: inline-flex;
+            gap: 0.5rem;
+        }
+
+        nav[role="navigation"] span.relative.z-0 a,
+        nav[role="navigation"] span.relative.z-0 span[aria-current="page"] span,
+        nav[role="navigation"] span.relative.z-0 span[disabled] span,
+        nav[role="navigation"] span.relative.z-0 span.relative {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1rem;
+            min-width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        nav[role="navigation"] span.relative.z-0 a:hover {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        nav[role="navigation"] span.relative.z-0 span[aria-current="page"] span {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            cursor: default;
+            box-shadow: 0 5px 15px -5px var(--primary);
+        }
+
+        nav[role="navigation"] span.relative.z-0 span[disabled] span {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        nav[role="navigation"] svg {
+            width: 20px;
+            height: 20px;
         }
     </style>
 </head>
@@ -435,12 +645,26 @@
 
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
-            <div class="sidebar-logo">
-                <span>ELITE PC</span>
+            <div class="sidebar-logo" style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 2rem;">
+                <div style="width: 38px; height: 38px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; box-shadow: 0 8px 16px -4px var(--primary-glow);">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="15" x2="23" y2="15"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="15" x2="4" y2="15"></line></svg>
+                </div>
+                <span style="font-family: 'Outfit', sans-serif; font-size: 1.4rem; font-weight: 900; background: linear-gradient(to right, var(--text), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px;">ElitePC</span>
             </div>
+            
+            {{--
+            @if(Auth::user()->isAdmin() || Auth::user()->isOwner())
+            <div style="margin-bottom: 2.5rem;">
+                <a href="{{ Auth::user()->isAdmin() ? route('admin.products') : route('owner.products') }}" class="btn btn-primary" style="width: 100%; border-radius: 14px; font-weight: 800; font-size: 0.85rem; padding: 0.9rem; justify-content: center; background: #6366f1; gap: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.4);">
+                    Add Product
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                </a>
+            </div>
+            @endif
+            --}}
 
             <!-- Navigation Links -->
-            <div style="flex: 1; overflow-y: auto;">
+            <div class="sidebar-nav" style="flex: 1; overflow-y: auto; overflow-x: hidden;">
                 @if(Auth::user()->isAdmin())
                     <div class="nav-group">
                         <p class="nav-label">Core Control</p>
@@ -568,6 +792,21 @@
                         </a>
                     </div>
                 @endif
+                
+                {{--
+                <!-- Mobile App Promotion Card (adapted from H-care UI mockup) -->
+                <div style="margin: 2.5rem 0.5rem; padding: 1.5rem; border-radius: 20px; background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(236, 72, 153, 0.05)); border: 1px dashed rgba(99, 102, 241, 0.2); text-align: center;">
+                    <div style="width: 40px; height: 40px; background: rgba(99, 102, 241, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem auto; color: var(--primary);">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                    </div>
+                    <div style="font-size: 0.8rem; font-weight: 800; color: var(--text); margin-bottom: 0.3rem;">Get mobile app</div>
+                    <p style="font-size: 0.7rem; color: var(--text-dim); line-height: 1.4; margin-bottom: 1rem;">Manage active nodes and check diagnostic feeds anywhere.</p>
+                    <div style="display: flex; gap: 0.4rem; justify-content: center;">
+                        <a href="#" style="background: var(--text); color: white; padding: 0.35rem 0.75rem; border-radius: 8px; font-size: 0.65rem; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem;">App Store</a>
+                        <a href="#" style="background: var(--text); color: white; padding: 0.35rem 0.75rem; border-radius: 8px; font-size: 0.65rem; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem;">Google Play</a>
+                    </div>
+                </div>
+                --}}
             </div>
 
             <!-- Bottom Actions -->
@@ -581,29 +820,24 @@
 
         <!-- Content -->
         <main class="main-wrapper">
-            <!-- Top Bar -->
-            <header class="top-bar">
+            <div class="dashboard-content">
+                <!-- Top Bar -->
+                <header class="top-bar">
                 <div style="display: flex; align-items: center; gap: 1.5rem;">
                     <div class="mobile-toggle" onclick="toggleSidebar()">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
                     </div>
                     <div class="search-box">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                        <input type="text" placeholder="Search orders, products, users...">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" style="color: var(--text-dim);"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        <input type="text" placeholder="Search task..." style="background: transparent !important; border: none !important; padding: 0 !important; margin: 0 !important; border-radius: 0 !important; box-shadow: none !important;">
                     </div>
                 </div>
 
                 <div class="top-actions">
-                    <div class="theme-toggle" onclick="toggleTheme()">
-                        <svg id="sun-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-                    </div>
+
 
                     <div class="user-pill" style="position: relative;" id="userDropdownTrigger">
-                        @if(Auth::user()->profile_image)
-                            <img src="{{ asset('storage/'.Auth::user()->profile_image) }}" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary);">
-                        @else
-                            <div class="user-avatar">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</div>
-                        @endif
+                        <img src="{{ Auth::user()->profile_image_url }}" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary);">
                         <div class="user-info">
                             <span class="name">{{ Auth::user()->name }}</span>
                             <span class="role">{{ strtoupper(Auth::user()->role) }}</span>
@@ -660,6 +894,7 @@
 
             <!-- Yield Content -->
             @yield('content')
+            </div>
         </main>
     </div>
 
@@ -706,17 +941,7 @@
         function closeLogoutModal() {
             document.getElementById('logoutModal').style.display = 'none';
         }
-        function toggleTheme() {
-            const html = document.documentElement;
-            const current = html.getAttribute('data-theme');
-            const target = current === 'dark' ? 'light' : 'dark';
-            html.setAttribute('data-theme', target);
-            localStorage.setItem('dashboard-theme', target);
-        }
 
-        // Initialize theme
-        const savedTheme = localStorage.getItem('dashboard-theme');
-        if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
 
         let deleteForm = null;
         function openDeleteModal(form) {
@@ -755,5 +980,6 @@
             };
         }
     </script>
+    <x-scroll-to-top />
 </body>
 </html>

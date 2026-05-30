@@ -3,75 +3,78 @@
 @section('title', 'Vendor Settlement - Admin')
 
 @section('content')
-<section style="padding-bottom: 5rem;">
-    <!-- Strategic Header -->
-    <div style="margin-bottom: 5rem;" class="flex-wrap-md header-stack">
+<section style="padding-bottom: 5rem; background: var(--bg);">
+    <!-- Cohesive Header -->
+    <div style="margin-bottom: 4rem; display: flex; justify-content: space-between; align-items: center;" class="header-stack">
         <div>
-            <h1 style="font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 900; font-family: 'Outfit'; letter-spacing: -2px; line-height: 1; margin-bottom: 1.5rem;">Vendor <span class="text-gradient">Settlement</span></h1>
-            <p style="opacity: 0.6; font-size: 1.1rem; font-weight: 600;">Reconcile store earnings and verify financial protocol targets.</p>
+            <h1 style="font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 900; font-family: 'Outfit'; color: var(--text); letter-spacing: -1.5px; margin-bottom: 0.5rem; line-height: 1.2;">
+                Vendor <span class="text-gradient">Settlement</span>
+            </h1>
+            <p style="color: var(--text-dim); font-size: 1rem; font-weight: 500;">Reconcile store earnings and verify financial protocol targets.</p>
         </div>
-        <div class="glass" style="padding: 0.6rem 1.5rem; border-radius: 50px; font-size: 0.8rem; font-weight: 800; color: var(--primary); letter-spacing: 1px; border-color: var(--primary);">
+        <div class="glass" style="padding: 0.6rem 1.5rem; border-radius: 50px; font-size: 0.75rem; font-weight: 800; color: var(--primary); letter-spacing: 1px; border-color: rgba(99,102,241,0.2); background: rgba(99,102,241,0.03);">
             TOTAL VENDORS: {{ $stores->count() }}
         </div>
     </div>
 
     <!-- Settlement Matrix -->
-    <div class="glass-card" style="padding: 0; border-radius: 40px; overflow: hidden;">
-        <div style="padding: 2.5rem 3.5rem; border-bottom: 1px solid var(--glass-border); background: rgba(255,255,255,0.02);">
-            <h3 style="font-weight: 900; font-family: 'Outfit'; font-size: 1.5rem; letter-spacing: -0.5px;">Financial <span class="text-gradient">Reconciliation</span></h3>
-        </div>
-        <div class="table-responsive">
-            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+    <div class="glass-card" style="padding: 2.5rem; background: #ffffff; border-color: rgba(15, 23, 42, 0.05); box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.03);">
+        <h3 style="margin-bottom: 2rem; font-weight: 900; font-family: 'Outfit'; color: var(--text);">Financial Reconciliation Matrix</h3>
+        <div class="table-container">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 800px;">
             <thead>
-                <tr style="background: rgba(255,255,255,0.01); border-bottom: 1px solid var(--glass-border);">
-                    <th style="padding: 2rem 3.5rem; opacity: 0.5; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px;">STORE NODE</th>
-                    <th style="padding: 2rem 3.5rem; opacity: 0.5; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px;">OPERATIVE (OWNER)</th>
-                    <th style="padding: 2rem 3.5rem; opacity: 0.5; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px;">TOTAL REVENUE</th>
-                    <th style="padding: 2rem 3.5rem; opacity: 0.5; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px;">PAYMENT PROTOCOL</th>
-                    <th style="padding: 2rem 3.5rem; opacity: 0.5; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; text-align: right;">OPERATIONS</th>
+                <tr style="border-bottom: 1px solid rgba(15, 23, 42, 0.05);">
+                    <th style="padding: 1.25rem 1.5rem; opacity: 0.5; font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px;">Store Node</th>
+                    <th style="padding: 1.25rem 1.5rem; opacity: 0.5; font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px;">Operative (Owner)</th>
+                    <th style="padding: 1.25rem 1.5rem; opacity: 0.5; font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px;">Total Revenue</th>
+                    <th style="padding: 1.25rem 1.5rem; opacity: 0.5; font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px;">Payment Protocol</th>
+                    <th style="padding: 1.25rem 1.5rem; opacity: 0.5; font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; text-align: right;">Operations</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($stores as $store)
-                <tr style="border-bottom: 1px solid var(--glass-border); transition: 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.02)'" onmouseout="this.style.background='transparent'">
-                    <td style="padding: 2rem 3.5rem;">
-                        <div style="font-weight: 800; font-size: 1.1rem; letter-spacing: -0.5px;">{{ $store->name }}</div>
-                        <div style="font-size: 0.75rem; opacity: 0.4; font-weight: 700; margin-top: 0.3rem;">NODE ID: #ST-{{ $store->id }}</div>
+                <tr style="border-bottom: 1px solid rgba(15, 23, 42, 0.05); transition: background 0.3s;" onmouseover="this.style.background='rgba(15, 23, 42, 0.01)'" onmouseout="this.style.background='transparent'">
+                    <td style="padding: 1.25rem 1.5rem;">
+                        <div style="font-weight: 800; font-size: 1.05rem; color: var(--text);">{{ $store->name }}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-dim); font-weight: 700; margin-top: 0.2rem;">NODE ID: #ST-{{ $store->id }}</div>
                     </td>
-                    <td style="padding: 2rem 3.5rem;">
-                        <div style="font-weight: 700; font-size: 1rem;">{{ $store->owner->name ?? 'SYSTEM' }}</div>
-                        <div style="font-size: 0.8rem; opacity: 0.5;">{{ $store->owner->email ?? 'N/A' }}</div>
+                    <td style="padding: 1.25rem 1.5rem;">
+                        <div style="font-weight: 700; font-size: 1rem; color: var(--text);">{{ $store->owner->name ?? 'SYSTEM' }}</div>
+                        <div style="font-size: 0.8rem; color: var(--text-dim); margin-top: 0.15rem;">{{ $store->owner->email ?? 'N/A' }}</div>
                     </td>
-                    <td style="padding: 2rem 3.5rem;">
-                        <span style="font-weight: 900; font-family: 'Outfit'; font-size: 1.3rem; color: var(--primary);">${{ number_format($store->total_revenue, 2) }}</span>
+                    <td style="padding: 1.25rem 1.5rem;">
+                        <span style="font-weight: 900; font-family: 'Outfit'; font-size: 1.2rem; color: var(--primary);">${{ number_format($store->total_revenue, 2) }}</span>
                     </td>
-                    <td style="padding: 2rem 3.5rem;">
+                    <td style="padding: 1.25rem 1.5rem;">
                         @if($store->paymentAccount)
-                            <div style="background: rgba(var(--primary-rgb), 0.1); border: 1px solid rgba(var(--primary-rgb), 0.2); padding: 0.8rem 1.2rem; border-radius: 12px; display: inline-block;">
-                                <div style="font-size: 0.8rem; font-weight: 800; color: var(--primary);">{{ $store->paymentAccount->bank_name }}</div>
-                                <div style="font-size: 0.7rem; opacity: 0.6; font-weight: 700; margin-top: 0.2rem;">{{ $store->paymentAccount->account_number }}</div>
+                            <div style="background: rgba(99, 102, 241, 0.06); border: 1px solid rgba(99, 102, 241, 0.12); padding: 0.6rem 1rem; border-radius: 10px; display: inline-block;">
+                                <div style="font-size: 0.8rem; font-weight: 800; color: var(--primary);">{{ $store->paymentAccount->account_id }}</div>
+                                <div style="font-size: 0.7rem; color: var(--text-dim); font-weight: 700; margin-top: 0.15rem;">{{ $store->paymentAccount->account_name }} ({{ $store->paymentAccount->currency }})</div>
                             </div>
                         @else
-                            <span style="color: #ef4444; font-size: 0.8rem; font-weight: 800;">PROTOCOL UNLINKED</span>
+                            <span style="padding: 0.35rem 0.8rem; border-radius: 50px; font-size: 0.7rem; font-weight: 800; background: rgba(239, 68, 68, 0.08); color: #ef4444; letter-spacing: 0.5px;">PROTOCOL UNLINKED</span>
                         @endif
                     </td>
-                    <td style="padding: 2rem 3.5rem; text-align: right;">
-                        <div style="display: flex; gap: 1rem; justify-content: flex-end;">
-                            <form action="{{ route('admin.users.impersonate', $store->owner_id) }}" method="POST">
-                                @csrf
-                                <button type="submit" class="glass" style="padding: 0.8rem 1.5rem; border-radius: 12px; font-size: 0.75rem; font-weight: 900; color: var(--primary); border-color: rgba(99, 102, 241, 0.2); background: none; cursor: pointer;">AUDIT STORE</button>
-                            </form>
-                        </div>
+                    <td style="padding: 1.25rem 1.5rem; text-align: right;">
+                        @if($store->owner)
+                        <form action="{{ route('admin.users.impersonate', $store->owner->id) }}" method="POST" style="margin: 0; display: inline-block;">
+                            @csrf
+                            <button type="submit" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.75rem; border-radius: 8px; font-weight: 700; color: var(--primary); border-color: rgba(99,102,241,0.2);">Audit Store</button>
+                        </form>
+                        @else
+                        <span style="font-size: 0.8rem; color: var(--text-dim); font-weight: 700;">NO OWNER</span>
+                        @endif
                     </td>
                 </tr>
                 @endforeach
                 @if($stores->isEmpty())
                 <tr>
-                    <td colspan="5" style="padding: 8rem; text-align: center; opacity: 0.3; font-weight: 800; letter-spacing: 2px;">NO VENDOR NODES DETECTED</td>
+                    <td colspan="5" style="padding: 6rem 1.5rem; text-align: center; color: var(--text-dim); font-weight: 700; font-size: 0.95rem;">NO VENDOR NODES DETECTED</td>
                 </tr>
                 @endif
             </tbody>
         </table>
+    </div>
     </div>
 </section>
 @endsection

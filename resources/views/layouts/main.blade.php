@@ -14,11 +14,7 @@
     <!-- Styles -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
-    <!-- Theme Initialization -->
-    <script>
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-    </script>
+
     
     @yield('styles')
 </head>
@@ -155,6 +151,8 @@
                         badge.style.display = 'flex';
                     }
                     showToast('Added to cart');
+                } else {
+                    showToast(data.message || 'Failed to add to cart', 'error');
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -163,5 +161,6 @@
         }
     </script>
     @yield('scripts')
+    <x-scroll-to-top />
 </body>
 </html>

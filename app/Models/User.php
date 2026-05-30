@@ -47,4 +47,17 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class);
     }
+
+    public function getProfileImageUrlAttribute()
+    {
+        if (!$this->profile_image) {
+            return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&background=random';
+        }
+        
+        if (str_starts_with($this->profile_image, 'http')) {
+            return $this->profile_image;
+        }
+
+        return asset('storage/' . $this->profile_image);
+    }
 }

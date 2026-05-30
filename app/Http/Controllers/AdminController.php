@@ -36,11 +36,21 @@ class AdminController extends Controller
 
     public function storeCategory(Request $request)
     {
-        $request->validate(['name' => 'required|string|max:255|unique:categories']);
+        $request->validate([
+            'name' => 'required|string|max:255|unique:categories',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('categories', 'public');
+        }
+
         Category::create([
             'name' => $request->name,
-            'slug' => Str::slug($request->name),
+            'slug' => \Illuminate\Support\Str::slug($request->name),
             'description' => $request->description,
+            'image' => $imagePath,
         ]);
         return back()->with('success', 'Category created.');
     }
@@ -138,8 +148,22 @@ class AdminController extends Controller
     public function updateCategory(Request $request, $id)
     {
         $category = Category::findOrFail($id);
-        $request->validate(['name' => 'required|string|max:255']);
-        $category->update($request->all());
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+        
+        $data = $request->all();
+        $data['slug'] = \Illuminate\Support\Str::slug($request->name);
+
+        if ($request->hasFile('image')) {
+            if ($category->image) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($category->image);
+            }
+            $data['image'] = $request->file('image')->store('categories', 'public');
+        }
+
+        $category->update($data);
         return redirect()->route('admin.categories')->with('success', 'Category updated.');
     }
 
@@ -184,6 +208,11 @@ class AdminController extends Controller
     public function destroyProductType($id)
     {
         ProductType::findOrFail($id)->delete();
+        
+        if (ProductType::count() === 0) {
+            \Illuminate\Support\Facades\DB::statement('ALTER TABLE product_types AUTO_INCREMENT = 1');
+        }
+
         return back()->with('success', 'Product Type deleted successfully.');
     }
 
@@ -199,8 +228,23 @@ class AdminController extends Controller
     public function updateStore(Request $request, $id)
     {
         $store = Store::findOrFail($id);
-        $store->update($request->all());
-        return redirect()->route('admin.stores')->with('success', 'Store updated.');
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'owner_id' => 'nullable|exists:users,id'
+        ]);
+
+        $store->update($request->only('name', 'email'));
+
+        if ($request->filled('owner_id')) {
+            // Find current owner of this store and demote them
+            User::where('store_id', $store->id)->update(['role' => 'user', 'store_id' => null]);
+            
+            // Promote new owner
+            User::where('id', $request->owner_id)->update(['role' => 'owner', 'store_id' => $store->id]);
+        }
+
+        return redirect()->route('admin.stores')->with('success', 'Store and owner updated.');
     }
 
     // Payment Account Management

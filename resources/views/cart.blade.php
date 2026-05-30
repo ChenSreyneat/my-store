@@ -76,7 +76,7 @@
                     </div>
                 </div>
 
-                <a href="{{ route('checkout') }}" class="btn btn-primary" style="width: 100%; padding: 1.5rem; font-size: 1.2rem; font-weight: 900; border-radius: 20px; box-shadow: 0 20px 40px rgba(var(--primary-rgb), 0.3);">Initialize Checkout</a>
+                <a href="{{ route('checkout') }}" class="btn btn-primary" style="width: 100%; padding: 1rem 1.5rem; font-size: 1.05rem; font-weight: 800; border-radius: 16px; box-shadow: 0 10px 25px rgba(var(--primary-rgb), 0.3);">Initialize Checkout</a>
                 
                 <div style="display: flex; align-items: center; justify-content: center; gap: 0.8rem; margin-top: 2.5rem; opacity: 0.4;">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>

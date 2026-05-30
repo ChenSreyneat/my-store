@@ -3,68 +3,58 @@
 @section('title', 'Contact Us - ElitePC')
 
 @section('content')
-<section style="padding: 10rem 0 6rem 0; position: relative;">
-    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 600px; background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.1) 0%, transparent 70%);"></div>
+<section style="padding: 10rem 0 6rem 0; background: var(--bg);">
+    <div class="container" style="max-width: 700px; margin: 0 auto;">
+        
+        <div>
+            <h1 style="font-size: 3.5rem; font-weight: 800; color: #4F46E5; margin-bottom: 0.5rem; font-family: 'Outfit';">Contact Me</h1>
+            <h2 style="font-size: 1.5rem; font-weight: 500; color: var(--text-dim); margin-bottom: 2rem; font-family: 'Outfit';">Let's get in touch.</h2>
+            <p style="color: var(--text-dim); line-height: 1.6; margin-bottom: 3rem; font-size: 1rem; max-width: 100%;">
+                I am always open to discussing new projects, creative ideas, or opportunities to be part of your visions.
+            </p>
 
-    <div class="container" style="position: relative; z-index: 2;">
-        <div style="text-align: center; margin-bottom: 5rem;">
-            <div class="glass" style="display: inline-flex; padding: 0.6rem 2rem; border-radius: 50px; margin-bottom: 2rem; font-weight: 800; color: var(--primary); font-size: 0.9rem; letter-spacing: 2px;">GET IN TOUCH</div>
-            <h1 style="font-size: clamp(3rem, 8vw, 5.5rem); font-weight: 900; font-family: 'Outfit'; line-height: 1; letter-spacing: -2px;">Hardware <span class="text-gradient">Support</span></h1>
-            <p style="opacity: 0.7; max-width: 700px; margin: 2rem auto 0 auto; font-size: 1.2rem; line-height: 1.6;">Have a technical question or need help with an order? Our world-class experts are here to help.</p>
-        </div>
-
-        <div class="responsive-grid grid-2" style="grid-template-columns: 1fr 1.5fr; align-items: start; gap: 4rem;">
-            <!-- Contact Info -->
-            <div style="display: flex; flex-direction: column; gap: 2rem;">
-                <div class="glass" style="padding: 2.5rem; border-radius: 32px;">
-                    <div style="width: 48px; height: 48px; background: rgba(99, 102, 241, 0.1); border-radius: 12px; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: center; color: var(--primary);">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                    </div>
-                    <h4 style="font-weight: 800; margin-bottom: 0.5rem;">Phone Support</h4>
-                    <p style="opacity: 0.6; font-size: 0.95rem;">+855 12 345 678</p>
-                    <p style="opacity: 0.4; font-size: 0.8rem; margin-top: 0.5rem;">Mon - Sat, 9am - 6pm</p>
-                </div>
-
-                <div class="glass" style="padding: 2.5rem; border-radius: 32px;">
-                    <div style="width: 48px; height: 48px; background: rgba(236, 72, 153, 0.1); border-radius: 12px; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: center; color: var(--secondary);">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                    </div>
-                    <h4 style="font-weight: 800; margin-bottom: 0.5rem;">Email Inquiry</h4>
-                    <p style="opacity: 0.6; font-size: 0.95rem;">support@elitepc.com</p>
-                    <p style="opacity: 0.4; font-size: 0.8rem; margin-top: 0.5rem;">Average response: 2 hours</p>
-                </div>
-            </div>
-
-            <!-- Contact Form -->
-            <div class="glass" style="padding: clamp(1.5rem, 5vw, 4rem); border-radius: 40px;">
-                <form action="#" method="POST" style="display: flex; flex-direction: column; gap: 2rem;">
-                    <div class="responsive-grid grid-2" style="gap: 2rem;">
-                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                            <label style="font-weight: 700; opacity: 0.7; font-size: 0.9rem;">Name</label>
-                            <input type="text" required style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 1rem; border-radius: 16px; color: white; width: 100%;">
-                        </div>
-                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                            <label style="font-weight: 700; opacity: 0.7; font-size: 0.9rem;">Email</label>
-                            <input type="email" required style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 1rem; border-radius: 16px; color: white; width: 100%;">
-                        </div>
+            <form action="#" method="POST" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                @csrf
+                <div class="responsive-grid-2">
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <label style="font-weight: 600; font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.2rem;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--text-dim);"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            Full Name
+                        </label>
+                        <input type="text" placeholder="Your name" required style="background: #ffffff; border: 1px solid #e2e8f0; padding: 0.8rem 1rem; border-radius: 8px; color: var(--text); width: 100%; font-size: 0.95rem; outline: none; transition: border-color 0.2s;">
                     </div>
                     <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                        <label style="font-weight: 700; opacity: 0.7; font-size: 0.9rem;">Subject</label>
-                        <select style="background: var(--dark); border: 1px solid var(--glass-border); padding: 1rem; border-radius: 16px; color: white; width: 100%;">
-                            <option>Order Support</option>
-                            <option>Technical Question</option>
-                            <option>Returns & Warranty</option>
-                            <option>Other</option>
-                        </select>
+                        <label style="font-weight: 600; font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.2rem;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--text-dim);"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                            Email Address
+                        </label>
+                        <input type="email" placeholder="your@email.com" required style="background: #ffffff; border: 1px solid #e2e8f0; padding: 0.8rem 1rem; border-radius: 8px; color: var(--text); width: 100%; font-size: 0.95rem; outline: none; transition: border-color 0.2s;">
                     </div>
-                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                        <label style="font-weight: 700; opacity: 0.7; font-size: 0.9rem;">Message</label>
-                        <textarea required style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 1rem; border-radius: 16px; color: white; height: 150px; resize: none; width: 100%;"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary" style="padding: 1.25rem; font-size: 1.1rem; width: 100%;">Send Message</button>
-                </form>
-            </div>
+                </div>
+                
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <label style="font-weight: 600; font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.2rem;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--text-dim);"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        Subject
+                    </label>
+                    <input type="text" placeholder="What's this about?" required style="background: #ffffff; border: 1px solid #e2e8f0; padding: 0.8rem 1rem; border-radius: 8px; color: var(--text); width: 100%; font-size: 0.95rem; outline: none; transition: border-color 0.2s;">
+                </div>
+                
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <label style="font-weight: 600; font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.2rem;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--text-dim);"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        Message
+                    </label>
+                    <textarea placeholder="Tell me about your project or question..." required style="background: #ffffff; border: 1px solid #e2e8f0; padding: 0.8rem 1rem; border-radius: 8px; color: var(--text); height: 160px; resize: none; width: 100%; font-size: 0.95rem; outline: none; transition: border-color 0.2s;"></textarea>
+                </div>
+                
+                <button type="submit" style="background: #2563eb; color: white; border: none; padding: 1rem; border-radius: 8px; font-weight: 600; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: background 0.3s; margin-top: 0.5rem; width: 100%;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    Send Message
+                </button>
+            </form>
         </div>
+        
     </div>
 </section>
 @endsection

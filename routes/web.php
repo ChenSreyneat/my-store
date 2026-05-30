@@ -63,6 +63,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/checkout', [OrderController::class, 'placeOrder'])->name('checkout.place');
     Route::get('/order/success/{order}', [OrderController::class, 'success'])->name('order.success');
     Route::get('/my-orders', [OrderController::class, 'myOrders'])->name('orders.my');
+    Route::delete('/my-orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
 });
 
 // Public AJAX Routes (Handle Auth internally)

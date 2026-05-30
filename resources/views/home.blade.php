@@ -16,7 +16,7 @@
         overflow: hidden;
         display: flex;
         align-items: center;
-        background: #1A2368;
+        background: var(--bg);
     }
     .slide-bg {
         position: absolute;
@@ -47,6 +47,10 @@
         background: var(--primary) !important;
         width: 30px;
         border-radius: 6px;
+    }
+    .main-product-pagination .swiper-pagination-bullet {
+        background: var(--text-dim) !important;
+        opacity: 0.4;
     }
     .swiper-button-next, .swiper-button-prev {
         color: #fff !important;
@@ -96,7 +100,7 @@
                     <span style="width: 8px; height: 8px; background: var(--secondary); border-radius: 50%; display: inline-block;"></span>
                     ELITE PERFORMANCE ARCHITECTURE
                 </div>
-                <h1 style="font-size: clamp(3.5rem, 8vw, 6rem); line-height: 1; font-weight: 900; margin-bottom: 2rem; font-family: 'Outfit'; color: #fff;">
+                <h1 style="line-height: 1; font-weight: 900; margin-bottom: 2rem; font-family: 'Outfit'; color: #fff;">
                     Unleash the <span class="text-gradient">Power</span> Within
                 </h1>
                 <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 3.5rem; max-width: 600px; line-height: 1.6; color: #fff;">
@@ -116,7 +120,7 @@
                 <div class="glass" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 50px; margin-bottom: 2rem; font-size: 0.9rem; font-weight: 700; color: #fff;">
                     LIMITLESS GRAPHICAL FIDELITY
                 </div>
-                <h1 style="font-size: clamp(3.5rem, 8vw, 6rem); line-height: 1; font-weight: 900; margin-bottom: 2rem; font-family: 'Outfit'; color: #fff;">
+                <h1 style="line-height: 1; font-weight: 900; margin-bottom: 2rem; font-family: 'Outfit'; color: #fff;">
                     Next-Gen <span class="text-gradient">Graphics</span>
                 </h1>
                 <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 3.5rem; max-width: 600px; line-height: 1.6; color: #fff;">
@@ -133,7 +137,7 @@
                 <div class="glass" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 50px; margin-bottom: 2rem; font-size: 0.9rem; font-weight: 700; color: #fff;">
                     PORTABLE POWER STATIONS
                 </div>
-                <h1 style="font-size: clamp(3.5rem, 8vw, 6rem); line-height: 1; font-weight: 900; margin-bottom: 2rem; font-family: 'Outfit'; color: #fff;">
+                <h1 style="line-height: 1; font-weight: 900; margin-bottom: 2rem; font-family: 'Outfit'; color: #fff;">
                     Elite <span class="text-gradient">Portability</span>
                 </h1>
                 <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 3.5rem; max-width: 600px; line-height: 1.6; color: #fff;">
@@ -150,7 +154,7 @@
                 <div class="glass" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 50px; margin-bottom: 2rem; font-size: 0.9rem; font-weight: 700; color: #fff;">
                     THERMAL SUPREMACY
                 </div>
-                <h1 style="font-size: clamp(3.5rem, 8vw, 6rem); line-height: 1; font-weight: 900; margin-bottom: 2rem; font-family: 'Outfit'; color: #fff;">
+                <h1 style="line-height: 1; font-weight: 900; margin-bottom: 2rem; font-family: 'Outfit'; color: #fff;">
                     Stay <span class="text-gradient">Frosty</span>
                 </h1>
                 <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 3.5rem; max-width: 600px; line-height: 1.6; color: #fff;">
@@ -167,7 +171,7 @@
                 <div class="glass" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 50px; margin-bottom: 2rem; font-size: 0.9rem; font-weight: 700; color: #fff;">
                     TACTICAL INPUT INTERFACES
                 </div>
-                <h1 style="font-size: clamp(3.5rem, 8vw, 6rem); line-height: 1; font-weight: 900; margin-bottom: 2rem; font-family: 'Outfit'; color: #fff;">
+                <h1 style="line-height: 1; font-weight: 900; margin-bottom: 2rem; font-family: 'Outfit'; color: #fff;">
                     Precision <span class="text-gradient">Control</span>
                 </h1>
                 <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 3.5rem; max-width: 600px; line-height: 1.6; color: #fff;">
@@ -185,31 +189,31 @@
 </div>
 
 <!-- Categories Section -->
-<section style="padding: 6rem 0; background: #fff;">
+<section style="padding: 6rem 0; background: var(--glass-bg); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);">
     <div class="container">
-        <h2 style="font-size: clamp(2rem, 5vw, 2.5rem); font-weight: 800; margin-bottom: 5rem; text-align: center; font-family: 'Outfit'; color: #111827; letter-spacing: -1px;">
+        <h2 style="font-size: clamp(2.5rem, 5vw, 3rem); font-weight: 800; margin-bottom: 4rem; text-align: center; font-family: 'Outfit'; color: #4F46E5; letter-spacing: -1px;">
             Browse Popular Categories
         </h2>
-        <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 4rem; align-items: flex-end;">
+        <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 2rem 4rem; align-items: flex-end;">
             @foreach($categories as $category)
-            <a href="{{ route('category', $category->slug) }}" style="text-decoration: none; text-align: center; width: 180px; transition: 0.4s;" class="category-item">
-                <div style="width: 100%; height: 160px; display: flex; align-items: center; justify-content: center; overflow: hidden; transition: 0.4s;">
+            <a href="{{ route('category', $category->slug) }}" style="text-decoration: none; text-align: center; width: 160px; transition: transform 0.3s ease; display: block;" class="category-item" onmouseover="this.style.transform='translateY(-8px)'" onmouseout="this.style.transform='translateY(0)'">
+                <div style="width: 100%; height: 130px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
                     @php
                         $catImages = [
                             'cooling' => asset('storage/products/Case & Cooling/2.avif'),
                             'gpu' => asset('storage/products/Grapich cards/3.png'),
-                            'ram' => asset('storage/products/Memory(RAM)/1.jpg'),
-                            'mobo' => asset('storage/products/Mothers boards/1.jpg'),
-                            'cpu' => asset('storage/products/Processors/1.jpg'),
-                            'ssd' => asset('storage/products/Storage/SSD/TechNova.png'),
-                            'hdd' => asset('storage/products/Storage/HDD/2.jpg'),
+                            'ram' => asset('storage/products/Memory(RAM)/1.png'),
+                            'mobo' => asset('storage/products/Mothers boards/2.png'),
+                            'cpu' => asset('storage/products/Processors/1.png'),
+                            'ssd' => asset('storage/products/storage/1.png'),
+                            'desktop' => asset('storage/products/Desktop/1.png'),
                             'computer' => asset('storage/products/Computers/computer.png'),
                         ];
-                        $img = $catImages[strtolower($category->slug)] ?? 'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&q=80&w=300';
+                        $img = $category->image ? asset('storage/' . $category->image) : ($catImages[strtolower($category->slug)] ?? 'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&q=80&w=300');
                     @endphp
-                    <img src="{{ $img }}" style="width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply;">
+                    <img src="{{ $img }}" style="max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 4px 15px rgba(0,0,0,0.3));">
                 </div>
-                <h4 style="color: #111827; font-weight: 700; margin-top: 1.5rem; font-size: 1rem; font-family: 'Outfit';">{{ $category->name }}</h4>
+                <h4 style="color: var(--text); font-weight: 600; font-size: 1.05rem; font-family: 'Outfit';">{{ $category->name }}</h4>
             </a>
             @endforeach
         </div>
@@ -239,12 +243,12 @@
 </section>
 
 <!-- Our Products Section (Reference Style) -->
-<section id="featured" style="padding: 8rem 0; background: #1A2368;">
+<section id="featured" style="padding: 8rem 0; background: var(--bg);">
     <div class="container">
         <div style="text-align: center; margin-bottom: 5rem;">
-            <div style="color: #fff; font-size: 0.75rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1rem; opacity: 0.9;">BEST SELLING IN THIS WEEK</div>
+            <div style="color: var(--primary); font-size: 0.75rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1rem; opacity: 0.9;">BEST SELLING IN THIS WEEK</div>
             <div style="width: 30px; height: 3px; background: #facc15; margin: 0 auto 1.5rem auto;"></div>
-            <h2 style="font-size: clamp(2.5rem, 5vw, 3.5rem); font-weight: 700; color: #fff; font-family: 'Outfit';">Our Products</h2>
+            <h2 style="font-size: clamp(2.5rem, 5vw, 3.5rem); font-weight: 700; color: var(--title-color); font-family: 'Outfit';">Our Products</h2>
         </div>
 
         <div class="swiper product-swiper" style="padding-bottom: 4rem;">

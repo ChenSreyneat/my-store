@@ -30,7 +30,7 @@
                     <div style="position: absolute; bottom: 2rem; right: 2rem; background: rgba(0,0,0,0.05); padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.7rem; font-weight: 800; color: #64748b; letter-spacing: 1px;">ELITE OPTICS</div>
                 </div>
                 
-                <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.5rem;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(60px, 1fr)); gap: 1rem;">
                     @foreach($product->images as $img)
                     <div class="glass thumb-container" style="border-radius: 16px; overflow: hidden; cursor: pointer; height: 100px; background: white; padding: 0.8rem; border: 2px solid transparent; transition: 0.3s;" onclick="changeMainImage('{{ str_starts_with($img->image_url, 'http') ? $img->image_url : asset('storage/'.$img->image_url) }}', this)">
                         <img src="{{ str_starts_with($img->image_url, 'http') ? $img->image_url : asset('storage/'.$img->image_url) }}" style="width: 100%; height: 100%; object-fit: contain;">
@@ -48,10 +48,10 @@
                         <span style="opacity: 0.5; font-size: 0.9rem; font-weight: 600;">SKU: EPC-{{ str_pad($product->id, 6, '0', STR_PAD_LEFT) }}</span>
                     </div>
 
-                    <h1 style="font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 900; line-height: 1; margin-bottom: 2rem; font-family: 'Outfit'; letter-spacing: -2px;">{{ $product->name }}</h1>
+                    <h1 style="font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 900; line-height: 1.1; margin-bottom: 1.5rem; font-family: 'Outfit'; letter-spacing: -1px;">{{ $product->name }}</h1>
                     
-                    <div style="display: flex; align-items: flex-end; gap: 2.5rem; margin-bottom: 3.5rem;">
-                        <div style="font-size: clamp(2.5rem, 5vw, 3.5rem); font-weight: 900; color: var(--primary); font-family: 'Outfit';">${{ number_format($product->price, 2) }}</div>
+                    <div style="display: flex; align-items: flex-end; gap: 2rem; margin-bottom: 3rem;">
+                        <div style="font-size: clamp(1.8rem, 3vw, 2.2rem); font-weight: 800; color: var(--primary); font-family: 'Outfit';">${{ number_format($product->price, 2) }}</div>
                         <div style="padding-bottom: 0.8rem;">
                             <div class="glass" style="padding: 0.4rem 1rem; border-radius: 50px; color: #10b981; font-weight: 800; font-size: 0.75rem; letter-spacing: 1px; background: rgba(16, 185, 129, 0.05);">{{ $product->stock }} UNITS AVAILABLE</div>
                         </div>
@@ -65,13 +65,13 @@
                     </div>
 
                     <div style="display: flex; gap: 1.5rem; margin-bottom: 4rem;">
-                        <button onclick="addToCart({{ $product->id }})" class="btn btn-primary" style="flex: 1; padding: 1.5rem; font-size: 1.2rem; font-weight: 800; border-radius: 20px;">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 0.5rem;"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                        <button onclick="addToCart({{ $product->id }})" class="btn btn-primary" style="flex: 1; padding: 1rem 1.5rem; font-size: 1.05rem; font-weight: 800; border-radius: 16px;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 0.5rem;"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
                             Add to Cart
                         </button>
-                        <button onclick="toggleFavorite({{ $product->id }}, this)" class="glass" style="width: 70px; height: 70px; border-radius: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s;">
+                        <button onclick="toggleFavorite({{ $product->id }}, this)" class="glass" style="width: 55px; height: 55px; border-radius: 16px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s;">
                             @php $isFav = Auth::check() && Auth::user()->favorites()->where('product_id', $product->id)->exists(); @endphp
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="{{ $isFav ? '#ec4899' : 'none' }}" stroke="{{ $isFav ? '#ec4899' : 'currentColor' }}" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.84-8.84 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="{{ $isFav ? '#ec4899' : 'none' }}" stroke="{{ $isFav ? '#ec4899' : 'currentColor' }}" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.84-8.84 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                         </button>
                     </div>
 
@@ -109,37 +109,7 @@
             
             <div class="responsive-grid grid-4">
                 @foreach($related as $rel)
-                <div class="product-card animate-fade-in" style="animation-delay: {{ $loop->index * 0.1 }}s">
-                    <div class="image-container">
-                        <div class="swiper product-gallery" style="width: 100%; height: 100%;">
-                            <div class="swiper-wrapper">
-                                @foreach($rel->images as $image)
-                                <div class="swiper-slide">
-                                    <img src="{{ str_starts_with($image->image_url, 'http') ? $image->image_url : asset('storage/'.$image->image_url) }}" alt="{{ $rel->name }}">
-                                </div>
-                                @endforeach
-                                @if($rel->images->isEmpty())
-                                <div class="swiper-slide">
-                                    <img src="https://placehold.co/400x400/F1F5F9/0F172A?text={{ $rel->name }}" alt="{{ $rel->name }}">
-                                </div>
-                                @endif
-                            </div>
-                            <div class="swiper-pagination card-pagination"></div>
-                        </div>
-                        <button onclick="toggleFavorite({{ $rel->id }}, this)" style="position: absolute; top: 1rem; right: 1rem; background: var(--glass-bg); border: 1px solid var(--glass-border); width: 35px; height: 35px; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text); z-index: 20;">
-                            @php $isFavRel = Auth::check() && Auth::user()->favorites()->where('product_id', $rel->id)->exists(); @endphp
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="{{ $isFavRel ? '#ec4899' : 'none' }}" stroke="{{ $isFavRel ? '#ec4899' : 'currentColor' }}" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.84-8.84 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-                        </button>
-                    </div>
-                    <div class="content">
-                        <div style="font-size: 0.75rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem; text-transform: uppercase;">{{ $rel->category->name }}</div>
-                        <h4 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 0.8rem; font-weight: 800; font-family: 'Outfit';">{{ $rel->name }}</h4>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
-                            <div style="color: var(--primary); font-weight: 900; font-size: 1.3rem; font-family: 'Outfit';">${{ number_format($rel->price, 2) }}</div>
-                            <a href="{{ route('product.details', $rel->id) }}" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.75rem; border-radius: 10px;">Explore</a>
-                        </div>
-                    </div>
-                </div>
+                <x-product-card :product="$rel" />
                 @endforeach
             </div>
         </div>

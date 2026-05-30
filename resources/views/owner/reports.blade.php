@@ -1,82 +1,109 @@
 @extends('layouts.dashboard')
 
-@section('title', 'My Reports - Owner')
+@section('title', 'Reports - Owner')
 
 @section('content')
-<section>
-    <div style="margin-bottom: 5rem;" class="flex-wrap-md header-stack">
+<section style="padding-bottom: 5rem; font-family: 'Inter', sans-serif;">
+    <!-- Cohesive Header -->
+    <div style="margin-bottom: 3rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
         <div>
-            <h1 style="font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 900; font-family: 'Outfit'; letter-spacing: -2px; line-height: 1; margin-bottom: 1.5rem;">Store <span class="text-gradient">Analytics</span></h1>
-            <p style="opacity: 0.6; font-size: 1.1rem; font-weight: 600;">Detailed performance tracking for your storefront inventory and sales.</p>
-        </div>
-        <div class="glass" style="padding: 0.6rem 1.5rem; border-radius: 50px; font-size: 0.8rem; font-weight: 800; color: var(--primary); letter-spacing: 1px; border-color: var(--primary);">
-            TELEMETRY: ACTIVE
+            <h1 style="font-size: 2.2rem; font-weight: 800; color: #1e293b; margin-bottom: 0.5rem; line-height: 1.2;">
+                Store Analytics 📊
+            </h1>
+            <p style="color: #64748b; font-size: 1rem; margin: 0;">Detailed performance tracking for your storefront inventory and sales.</p>
         </div>
     </div>
 
     <!-- Quick Stats -->
-    <div style="margin-bottom: 5rem;" class="grid-responsive">
-        <div class="glass-card" style="padding: 2.5rem; border-radius: 32px; position: relative; overflow: hidden;">
-            <div style="position: absolute; top: -10px; right: -10px; width: 60px; height: 60px; background: var(--primary); opacity: 0.1; filter: blur(20px); border-radius: 50%;"></div>
-            <div style="font-size: 0.75rem; opacity: 0.5; text-transform: uppercase; font-weight: 800; letter-spacing: 2px; margin-bottom: 1rem;">Store Earnings</div>
-            <div style="font-size: 2.5rem; font-weight: 900; font-family: 'Outfit';" class="text-gradient">${{ number_format($monthlyRevenue->sum('total'), 2) }}</div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+        
+        <!-- Store Earnings -->
+        <div style="background: #ffffff; border-radius: 24px; padding: 2rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 15px rgba(0,0,0,0.02); display: flex; align-items: center; gap: 1.5rem;">
+            <div style="width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: #eef2ff; color: #6366f1;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            </div>
+            <div>
+                <div style="font-size: 1.8rem; font-weight: 800; color: #1e293b; line-height: 1.1; margin-bottom: 0.2rem;">
+                    ${{ number_format($monthlyRevenue->sum('total'), 2) }}
+                </div>
+                <div style="font-size: 0.85rem; font-weight: 600; color: #64748b;">Store Earnings</div>
+            </div>
         </div>
-        <div class="glass-card" style="padding: 2.5rem; border-radius: 32px; position: relative; overflow: hidden;">
-            <div style="position: absolute; top: -10px; right: -10px; width: 60px; height: 60px; background: #10b981; opacity: 0.1; filter: blur(20px); border-radius: 50%;"></div>
-            <div style="font-size: 0.75rem; opacity: 0.5; text-transform: uppercase; font-weight: 800; letter-spacing: 2px; margin-bottom: 1rem;">Inventory Size</div>
-            <div style="font-size: 2.5rem; font-weight: 900; font-family: 'Outfit';">{{ Auth::user()->store->products()->count() }} <span style="font-size: 1rem; opacity: 0.4;">SKUs</span></div>
+
+        <!-- Inventory Size -->
+        <div style="background: #ffffff; border-radius: 24px; padding: 2rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 15px rgba(0,0,0,0.02); display: flex; align-items: center; gap: 1.5rem;">
+            <div style="width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: #ecfdf5; color: #10b981;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+            </div>
+            <div>
+                <div style="font-size: 1.8rem; font-weight: 800; color: #1e293b; line-height: 1.1; margin-bottom: 0.2rem;">
+                    {{ Auth::user()->store->products()->count() }}
+                </div>
+                <div style="font-size: 0.85rem; font-weight: 600; color: #64748b;">Active SKUs</div>
+            </div>
         </div>
-        <div class="glass-card" style="padding: 2.5rem; border-radius: 32px; position: relative; overflow: hidden;">
-            <div style="position: absolute; top: -10px; right: -10px; width: 60px; height: 60px; background: #f59e0b; opacity: 0.1; filter: blur(20px); border-radius: 50%;"></div>
-            <div style="font-size: 0.75rem; opacity: 0.5; text-transform: uppercase; font-weight: 800; letter-spacing: 2px; margin-bottom: 1rem;">Recent Sales</div>
-            <div style="font-size: 2.5rem; font-weight: 900; font-family: 'Outfit';">{{ $recentOrders->count() }}</div>
+
+        <!-- Recent Sales -->
+        <div style="background: #ffffff; border-radius: 24px; padding: 2rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 15px rgba(0,0,0,0.02); display: flex; align-items: center; gap: 1.5rem;">
+            <div style="width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: #fff7ed; color: #f97316;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </div>
+            <div>
+                <div style="font-size: 1.8rem; font-weight: 800; color: #1e293b; line-height: 1.1; margin-bottom: 0.2rem;">
+                    {{ $recentOrders->count() }}
+                </div>
+                <div style="font-size: 0.85rem; font-weight: 600; color: #64748b;">Recent Sales</div>
+            </div>
         </div>
+
     </div>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(285px, 1fr)); gap: clamp(1rem, 2.5vw, 3rem); margin-bottom: 4rem;">
+    <div class="grid-split" style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-bottom: 3rem;">
         <!-- Monthly Earnings Chart -->
-        <div class="glass" style="padding: 3rem; border-radius: 40px;">
-            <h3 style="margin-bottom: 2rem; font-weight: 800;">Earnings Trend</h3>
-            <canvas id="earningsChart" height="300"></canvas>
+        <div style="background: #ffffff; border-radius: 24px; padding: 2.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03); display: flex; flex-direction: column;">
+            <h3 style="margin-bottom: 2rem; font-weight: 800; font-size: 1.3rem; color: #1e293b; margin-top: 0;">Earnings Trend</h3>
+            <div style="position: relative; width: 100%; height: 300px; flex: 1;">
+                <canvas id="earningsChart"></canvas>
+            </div>
         </div>
 
         <!-- Top Selling Items -->
-        <div class="glass" style="padding: 3rem; border-radius: 40px;">
-            <h3 style="margin-bottom: 2rem; font-weight: 800;">My Top Items</h3>
+        <div style="background: #ffffff; border-radius: 24px; padding: 2.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+            <h3 style="margin-bottom: 2rem; font-weight: 800; font-size: 1.3rem; color: #1e293b; margin-top: 0;">My Top Items</h3>
             <div style="display: flex; flex-direction: column; gap: 1.5rem;">
                 @foreach($topProducts as $tp)
-                <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid #f1f5f9;">
                     <div style="display: flex; align-items: center; gap: 1rem;">
-                        <div style="width: 48px; height: 48px; border-radius: 12px; overflow: hidden; background: var(--bg);">
+                        <div style="width: 48px; height: 48px; border-radius: 12px; overflow: hidden; background: #f8fafc; display: flex; align-items: center; justify-content: center; border: 1px solid #e2e8f0;">
                             <img src="{{ $tp->product->image_url ?: 'https://images.unsplash.com/photo-1591488320449-011701bb6704?auto=format&fit=crop&q=80&w=100' }}" style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
                         <div>
-                            <div style="font-weight: 700; font-size: 0.9rem;">{{ $tp->product->name }}</div>
-                            <div style="font-size: 0.75rem; opacity: 0.5;">{{ $tp->total_sold }} units</div>
+                            <div style="font-weight: 700; font-size: 0.95rem; color: #1e293b;">{{ $tp->product->name }}</div>
+                            <div style="font-size: 0.75rem; color: #64748b; margin-top: 0.15rem;">{{ $tp->total_sold }} units</div>
                         </div>
                     </div>
-                    <div style="font-weight: 800; color: var(--primary);">${{ number_format($tp->product->price * $tp->total_sold, 2) }}</div>
+                    <div style="font-weight: 800; color: #6366f1; font-size: 1.1rem;">${{ number_format($tp->product->price * $tp->total_sold, 2) }}</div>
                 </div>
                 @endforeach
                 @if($topProducts->isEmpty())
-                    <p style="opacity: 0.5; text-align: center; padding: 2rem;">No sales data yet.</p>
+                    <p style="color: #64748b; text-align: center; padding: 2rem; font-weight: 700;">No sales data yet.</p>
                 @endif
             </div>
         </div>
     </div>
 
     <!-- Desktop Table View -->
-    <div class="glass desktop-only" style="padding: 3rem; border-radius: 40px; display: none;">
-        <h3 style="margin-bottom: 2rem; font-weight: 800;">Recent Store Orders</h3>
-        <div class="table-responsive">
-            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+    <div class="desktop-only" style="background: #ffffff; border-radius: 24px; padding: 2.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03); display: none;">
+        <h3 style="margin-bottom: 2rem; font-weight: 800; font-size: 1.3rem; color: #1e293b; margin-top: 0;">Recent Store Orders</h3>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: separate; border-spacing: 0; text-align: left; min-width: 800px;">
                 <thead>
-                    <tr style="border-bottom: 1px solid var(--glass-border);">
-                        <th style="padding: 1.5rem; opacity: 0.5; font-size: 0.8rem; text-transform: uppercase;">Order ID</th>
-                        <th style="padding: 1.5rem; opacity: 0.5; font-size: 0.8rem; text-transform: uppercase;">Customer</th>
-                        <th style="padding: 1.5rem; opacity: 0.5; font-size: 0.8rem; text-transform: uppercase;">Amount</th>
-                        <th style="padding: 1.5rem; opacity: 0.5; font-size: 0.8rem; text-transform: uppercase;">Status</th>
-                        <th style="padding: 1.5rem; opacity: 0.5; font-size: 0.8rem; text-transform: uppercase;">Date</th>
+                    <tr>
+                        <th style="padding: 1.25rem 1.5rem; color: #64748b; font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; border-bottom: 2px solid #f1f5f9;">Order ID</th>
+                        <th style="padding: 1.25rem 1.5rem; color: #64748b; font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; border-bottom: 2px solid #f1f5f9;">Customer</th>
+                        <th style="padding: 1.25rem 1.5rem; color: #64748b; font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; border-bottom: 2px solid #f1f5f9;">Amount</th>
+                        <th style="padding: 1.25rem 1.5rem; color: #64748b; font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; border-bottom: 2px solid #f1f5f9;">Status</th>
+                        <th style="padding: 1.25rem 1.5rem; color: #64748b; font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; border-bottom: 2px solid #f1f5f9; text-align: right;">Date</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -90,16 +117,26 @@
                             return $item->price * $item->quantity;
                         });
                     @endphp
-                    <tr style="border-bottom: 1px solid var(--glass-border);">
-                        <td style="padding: 1.5rem; font-weight: 700;">#{{ $order->id }}</td>
-                        <td style="padding: 1.5rem;">{{ $order->user->name }}</td>
-                        <td style="padding: 1.5rem; font-weight: 800;">${{ number_format($ownerSubtotal, 2) }}</td>
-                        <td style="padding: 1.5rem;">
-                            <span style="padding: 0.3rem 0.8rem; border-radius: 50px; font-size: 0.7rem; font-weight: 700; background: {{ $order->status === 'paid' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(234, 179, 8, 0.1)' }}; color: {{ $order->status === 'paid' ? '#10b981' : '#eab308' }};">
-                                {{ strtoupper($order->status) }}
+                    <tr style="transition: background 0.3s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
+                        <td style="padding: 1.25rem 1.5rem; font-weight: 700; color: #1e293b; border-bottom: 1px solid #f1f5f9;">#{{ $order->id }}</td>
+                        <td style="padding: 1.25rem 1.5rem; color: #1e293b; font-weight: 600; border-bottom: 1px solid #f1f5f9;">{{ $order->user->name }}</td>
+                        <td style="padding: 1.25rem 1.5rem; font-weight: 800; color: #1e293b; border-bottom: 1px solid #f1f5f9;">${{ number_format($ownerSubtotal, 2) }}</td>
+                        <td style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #f1f5f9;">
+                            @php
+                                $statusStyles = [
+                                    'pending' => ['bg' => '#fef3c7', 'color' => '#d97706'],
+                                    'paid' => ['bg' => '#d1fae5', 'color' => '#059669'],
+                                    'shipped' => ['bg' => '#dbeafe', 'color' => '#2563eb'],
+                                    'completed' => ['bg' => '#ede9fe', 'color' => '#7c3aed'],
+                                    'cancelled' => ['bg' => '#fee2e2', 'color' => '#dc2626']
+                                ];
+                                $style = $statusStyles[$order->status] ?? ['bg' => '#f1f5f9', 'color' => '#64748b'];
+                            @endphp
+                            <span style="padding: 0.35rem 0.8rem; border-radius: 50px; font-size: 0.72rem; font-weight: 800; background: {{ $style['bg'] }}; color: {{ $style['color'] }}; text-transform: uppercase; letter-spacing: 0.5px;">
+                                {{ $order->status }}
                             </span>
                         </td>
-                        <td style="padding: 1.5rem; opacity: 0.5; font-size: 0.8rem;">{{ $order->created_at->format('M d, Y') }}</td>
+                        <td style="padding: 1.25rem 1.5rem; color: #64748b; font-size: 0.9rem; font-weight: 500; text-align: right; border-bottom: 1px solid #f1f5f9;">{{ $order->created_at->format('M d, Y') }}</td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -109,8 +146,8 @@
 
     <!-- Mobile Stacked Card View -->
     <div class="mobile-only" style="display: none;">
-        <div class="glass" style="padding: 2.5rem; border-radius: 40px; margin-bottom: 2rem;">
-            <h3 style="margin-bottom: 2rem; font-weight: 800;">Recent Store Orders</h3>
+        <div style="background: #ffffff; border-radius: 24px; padding: 2.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03); margin-bottom: 2rem;">
+            <h3 style="margin-bottom: 2rem; font-weight: 800; font-size: 1.3rem; color: #1e293b; margin-top: 0;">Recent Store Orders</h3>
             <div style="display: flex; flex-direction: column; gap: 1.5rem;">
                 @foreach($recentOrders as $order)
                 @php
@@ -121,26 +158,34 @@
                     $ownerSubtotal = $ownerItems->sum(function($item) {
                         return $item->price * $item->quantity;
                     });
+                    $statusStyles = [
+                        'pending' => ['bg' => '#fef3c7', 'color' => '#d97706'],
+                        'paid' => ['bg' => '#d1fae5', 'color' => '#059669'],
+                        'shipped' => ['bg' => '#dbeafe', 'color' => '#2563eb'],
+                        'completed' => ['bg' => '#ede9fe', 'color' => '#7c3aed'],
+                        'cancelled' => ['bg' => '#fee2e2', 'color' => '#dc2626']
+                    ];
+                    $style = $statusStyles[$order->status] ?? ['bg' => '#f1f5f9', 'color' => '#64748b'];
                 @endphp
-                <div class="glass-card" style="padding: 2rem; border-radius: 24px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem;">
-                        <span style="font-weight: 900; font-family: 'Outfit'; color: var(--primary);">#{{ $order->id }}</span>
-                        <span style="opacity: 0.5; font-size: 0.75rem;">{{ $order->created_at->format('M d, Y') }}</span>
+                <div style="background: #f8fafc; border-radius: 16px; padding: 1.5rem; border: 1px solid #f1f5f9;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                        <span style="font-weight: 800; color: #6366f1;">#{{ $order->id }}</span>
+                        <span style="font-size: 0.75rem; color: #64748b; font-weight: 600;">{{ $order->created_at->format('M d, Y') }}</span>
                     </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--glass-border);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #e2e8f0;">
                         <div>
-                            <div style="font-weight: 800; font-size: 0.95rem;">{{ $order->user->name }}</div>
-                            <div style="font-size: 0.75rem; opacity: 0.4;">Customer</div>
+                            <div style="font-weight: 700; font-size: 0.95rem; color: #1e293b;">{{ $order->user->name }}</div>
+                            <div style="font-size: 0.75rem; color: #64748b; margin-top: 0.15rem;">Customer</div>
                         </div>
                         <div style="text-align: right;">
-                            <span style="padding: 0.3rem 0.8rem; border-radius: 50px; font-size: 0.65rem; font-weight: 700; background: {{ $order->status === 'paid' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(234, 179, 8, 0.1)' }}; color: {{ $order->status === 'paid' ? '#10b981' : '#eab308' }};">
-                                {{ strtoupper($order->status) }}
+                            <span style="padding: 0.25rem 0.65rem; border-radius: 50px; font-size: 0.65rem; font-weight: 800; background: {{ $style['bg'] }}; color: {{ $style['color'] }}; text-transform: uppercase;">
+                                {{ $order->status }}
                             </span>
                         </div>
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="opacity: 0.5; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.5px;">ACQUISITION VALUE</span>
-                        <span style="font-weight: 900; font-family: 'Outfit'; font-size: 1.1rem; color: var(--primary);">${{ number_format($ownerSubtotal, 2) }}</span>
+                        <span style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px; color: #64748b;">TOTAL AMOUNT</span>
+                        <span style="font-weight: 800; font-size: 1.1rem; color: #1e293b;">${{ number_format($ownerSubtotal, 2) }}</span>
                     </div>
                 </div>
                 @endforeach
@@ -149,6 +194,11 @@
     </div>
 
     <style>
+        @media (max-width: 992px) {
+            .grid-split {
+                grid-template-columns: 1fr !important;
+            }
+        }
         @media (min-width: 769px) {
             .desktop-only { display: block !important; }
             .mobile-only { display: none !important; }
@@ -162,36 +212,39 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const ctx = document.getElementById('earningsChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: {!! json_encode($monthlyRevenue->pluck('month')) !!},
-            datasets: [{
-                label: 'Earnings ($)',
-                data: {!! json_encode($monthlyRevenue->pluck('total')) !!},
-                backgroundColor: '#6366f1',
-                borderRadius: 10,
-                barThickness: 30
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { display: false }
+    document.addEventListener("DOMContentLoaded", function() {
+        const ctx = document.getElementById('earningsChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: {!! json_encode($monthlyRevenue->pluck('month')) !!},
+                datasets: [{
+                    label: 'Earnings ($)',
+                    data: {!! json_encode($monthlyRevenue->pluck('total')) !!},
+                    backgroundColor: '#6366f1',
+                    borderRadius: 8,
+                    barThickness: 24
+                }]
             },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: { color: 'rgba(255,255,255,0.05)' },
-                    ticks: { color: 'rgba(255,255,255,0.5)' }
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
                 },
-                x: {
-                    grid: { display: false },
-                    ticks: { color: 'rgba(255,255,255,0.5)' }
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { drawBorder: false, color: '#f1f5f9' },
+                        ticks: { font: { family: 'Inter', size: 10 }, color: '#64748b' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { family: 'Inter', size: 10 }, color: '#64748b' }
+                    }
                 }
             }
-        }
+        });
     });
 </script>
 @endsection

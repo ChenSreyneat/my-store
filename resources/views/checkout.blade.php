@@ -10,12 +10,12 @@
     <div class="container">
         <div style="margin-bottom: 5rem;">
             <div class="glass" style="display: inline-flex; padding: 0.6rem 2rem; border-radius: 50px; margin-bottom: 2rem; font-weight: 800; color: var(--primary); font-size: 0.9rem; letter-spacing: 2px;">SECURE ACQUISITION</div>
-            <h1 style="font-size: clamp(3rem, 8vw, 4.5rem); font-weight: 900; font-family: 'Outfit'; letter-spacing: -2px; line-height: 1;">Complete <span class="text-gradient">Purchase</span></h1>
+            <h1 style="font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 900; font-family: 'Outfit'; letter-spacing: -1px; line-height: 1.1;">Complete <span class="text-gradient">Purchase</span></h1>
         </div>
 
         <form action="{{ route('checkout.place') }}" method="POST" id="checkout-form">
             @csrf
-            <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 5rem; align-items: start;">
+            <div class="responsive-grid-checkout">
                 <!-- Left: Logistics & Payment -->
                 <div style="display: flex; flex-direction: column; gap: 4rem;">
                     <!-- Shipping -->
@@ -31,11 +31,11 @@
                         <div style="display: flex; flex-direction: column; gap: 2.5rem;">
                             <div style="display: flex; flex-direction: column; gap: 0.8rem;">
                                 <label style="font-size: 0.85rem; font-weight: 800; opacity: 0.6; letter-spacing: 1px;">PRECISE LOCATION ADDRESS</label>
-                                <textarea name="shipping_address" required style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 1.5rem; border-radius: 20px; color: white; resize: none; min-height: 120px; font-size: 1.1rem; font-weight: 600; transition: 0.3s;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--glass-border)'">{{ Auth::user()->address }}</textarea>
+                                <textarea name="shipping_address" required style="background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 1.5rem; border-radius: 20px; color: var(--text); resize: none; min-height: 120px; font-size: 1.1rem; font-weight: 600; transition: 0.3s;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--glass-border)'">{{ Auth::user()->address }}</textarea>
                             </div>
                             <div style="display: flex; flex-direction: column; gap: 0.8rem;">
                                 <label style="font-size: 0.85rem; font-weight: 800; opacity: 0.6; letter-spacing: 1px;">CONTACT TELEMETRY</label>
-                                <input type="text" name="phone_number" value="{{ Auth::user()->phone }}" required style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 1.25rem; border-radius: 20px; color: white; font-size: 1.1rem; font-weight: 600; transition: 0.3s;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--glass-border)'">
+                                <input type="text" name="phone_number" value="{{ Auth::user()->phone }}" required style="background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 1.25rem; border-radius: 20px; color: var(--text); font-size: 1.1rem; font-weight: 600; transition: 0.3s;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--glass-border)'">
                             </div>
                         </div>
                     </div>
@@ -50,13 +50,7 @@
                             <div class="glass" style="padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.75rem; font-weight: 800; opacity: 0.5;">PAYMENT GATEWAY</div>
                         </div>
 
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;">
-                            <label class="glass-card" style="padding: 2rem 1.5rem; cursor: pointer; text-align: center; transition: 0.4s; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; border-width: 2px;" id="label-cod">
-                                <input type="radio" name="payment_method" value="cod" checked style="display: none;" onchange="updatePaymentUI()">
-                                <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">💵</div>
-                                <div style="font-weight: 900; font-family: 'Outfit'; letter-spacing: 1px;">COD</div>
-                                <div style="font-size: 0.7rem; opacity: 0.5; font-weight: 800;">CASH ON DELIVERY</div>
-                            </label>
+                        <div class="responsive-grid-2">
                             <label class="glass-card" style="padding: 2rem 1.5rem; cursor: pointer; text-align: center; transition: 0.4s; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; border-width: 2px;" id="label-card">
                                 <input type="radio" name="payment_method" value="card" style="display: none;" onchange="updatePaymentUI()">
                                 <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">💳</div>
@@ -64,7 +58,7 @@
                                 <div style="font-size: 0.7rem; opacity: 0.5; font-weight: 800;">CREDIT / DEBIT</div>
                             </label>
                             <label class="glass-card" style="padding: 2rem 1.5rem; cursor: pointer; text-align: center; transition: 0.4s; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; border-width: 2px;" id="label-bakong">
-                                <input type="radio" name="payment_method" value="bakong" style="display: none;" onchange="updatePaymentUI()">
+                                <input type="radio" name="payment_method" value="bakong" checked style="display: none;" onchange="updatePaymentUI()">
                                 <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🇰🇭</div>
                                 <div style="font-weight: 900; font-family: 'Outfit'; letter-spacing: 1px; color: #eab308;">BAKONG</div>
                                 <div style="font-size: 0.7rem; opacity: 0.5; font-weight: 800;">KHQR INSTANT</div>
@@ -105,20 +99,20 @@
                             <div style="display: grid; grid-template-columns: 1fr; gap: 2rem;">
                                 <div style="display: flex; flex-direction: column; gap: 0.8rem;">
                                     <label style="font-size: 0.85rem; font-weight: 800; opacity: 0.6; letter-spacing: 1px;">CARDHOLDER NAME</label>
-                                    <input type="text" id="card_name_input" name="card_name" placeholder="JOHN DOE" style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 1.25rem; border-radius: 20px; color: white; font-size: 1.1rem; font-weight: 600; text-transform: uppercase;">
+                                    <input type="text" id="card_name_input" name="card_name" placeholder="JOHN DOE" style="background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 1.25rem; border-radius: 20px; color: var(--text); font-size: 1.1rem; font-weight: 600; text-transform: uppercase;">
                                 </div>
                                 <div style="display: flex; flex-direction: column; gap: 0.8rem;">
                                     <label style="font-size: 0.85rem; font-weight: 800; opacity: 0.6; letter-spacing: 1px;">CARD NUMBER</label>
-                                    <input type="text" id="card_number_input" name="card_number" placeholder="0000 0000 0000 0000" maxlength="19" style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 1.25rem; border-radius: 20px; color: white; font-size: 1.1rem; font-weight: 600;">
+                                    <input type="text" id="card_number_input" name="card_number" placeholder="0000 0000 0000 0000" maxlength="19" style="background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 1.25rem; border-radius: 20px; color: var(--text); font-size: 1.1rem; font-weight: 600;">
                                 </div>
-                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                                <div class="responsive-grid-2">
                                     <div style="display: flex; flex-direction: column; gap: 0.8rem;">
                                         <label style="font-size: 0.85rem; font-weight: 800; opacity: 0.6; letter-spacing: 1px;">EXPIRY DATE</label>
-                                        <input type="text" id="card_expiry_input" name="card_expiry" placeholder="MM/YY" maxlength="5" style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 1.25rem; border-radius: 20px; color: white; font-size: 1.1rem; font-weight: 600;">
+                                        <input type="text" id="card_expiry_input" name="card_expiry" placeholder="MM/YY" maxlength="5" style="background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 1.25rem; border-radius: 20px; color: var(--text); font-size: 1.1rem; font-weight: 600;">
                                     </div>
                                     <div style="display: flex; flex-direction: column; gap: 0.8rem;">
                                         <label style="font-size: 0.85rem; font-weight: 800; opacity: 0.6; letter-spacing: 1px;">CVV / CVC</label>
-                                        <input type="password" name="card_cvv" placeholder="***" maxlength="4" style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 1.25rem; border-radius: 20px; color: white; font-size: 1.1rem; font-weight: 600;">
+                                        <input type="password" name="card_cvv" placeholder="***" maxlength="4" style="background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 1.25rem; border-radius: 20px; color: var(--text); font-size: 1.1rem; font-weight: 600;">
                                     </div>
                                 </div>
                             </div>
@@ -156,7 +150,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" id="submit-btn" class="btn btn-primary" style="width: 100%; padding: 1.5rem; font-size: 1.3rem; font-weight: 900; border-radius: 20px; box-shadow: 0 20px 40px rgba(var(--primary-rgb), 0.3);">Authorize Acquisition</button>
+                    <button type="submit" id="submit-btn" class="btn btn-primary" style="width: 100%; padding: 1rem 1.5rem; font-size: 1.05rem; font-weight: 800; border-radius: 16px; box-shadow: 0 10px 25px rgba(var(--primary-rgb), 0.3);">Authorize Acquisition</button>
                     
                     <div style="display: flex; align-items: center; justify-content: center; gap: 0.8rem; margin-top: 2.5rem; opacity: 0.4;">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
@@ -169,40 +163,87 @@
 </section>
 
 <!-- Bakong Modal (Elite Redesign) -->
-<div id="bakong-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); backdrop-filter: blur(25px); z-index: 9999; align-items: center; justify-content: center; padding: 2rem;">
-    <div class="glass-card" style="background: white; color: black; padding: 4rem; text-align: center; max-width: 500px; width: 100%; box-shadow: 0 40px 100px -20px rgba(0,0,0,0.8); border-radius: 50px; border-color: #eab308;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem;">
-            <div style="color: #eab308; font-weight: 900; font-size: 2.2rem; font-family: 'Outfit'; letter-spacing: -1px;">BAKONG <span style="color: #cbd5e1; font-weight: 400;">CORE</span></div>
-            <button onclick="closeBakongModal()" style="background: #f1f5f9; border: none; width: 44px; height: 44px; border-radius: 12px; font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s;" onmouseover="this.style.background='#fee2e2'; this.style.color='#ef4444'">&times;</button>
-        </div>
-        
-        <p style="opacity: 0.6; margin-bottom: 3rem; font-size: 1.1rem; font-weight: 600; line-height: 1.5;">Execute secure KHQR scan via your financial institution to finalize the acquisition.</p>
-        
-        <div id="qr-container" style="width: 320px; height: 320px; background: white; margin: 0 auto 3rem auto; padding: 1.5rem; border: 2px solid #f1f5f9; border-radius: 32px; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.05);">
-            <div id="qr-loader" style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: white; border-radius: 30px;">
-                <div class="loader"></div>
-            </div>
-            <img id="qr-image" src="" style="width: 100%; height: 100%; object-fit: contain; display: none;">
+<div id="bakong-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); z-index: 9999; align-items: center; justify-content: center;">
+    <div style="background: white; color: #1e293b; width: 300px; height: 400px; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); display: flex; flex-direction: column; font-family: 'Inter', sans-serif;">
+        <!-- Top Header (Red) -->
+        <div style="background: #e11d48; height: 50px; display: flex; justify-content: center; align-items: center; position: relative; flex-shrink: 0;">
+            <div style="color: white; font-weight: 900; font-size: 1.3rem; letter-spacing: 1px;">KH<span style="font-weight: 400;">QR</span></div>
+            <button onclick="closeBakongModal()" style="position: absolute; right: 1rem; background: transparent; border: none; color: white; opacity: 0.7; font-size: 1.2rem; cursor: pointer; transition: 0.3s;" onmouseover="this.style.opacity='1'">&times;</button>
         </div>
 
-        <div style="background: #f8fafc; padding: 2.5rem; border-radius: 24px; margin-bottom: 3rem; border: 1px solid #f1f5f9;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                <span style="font-size: 0.8rem; font-weight: 800; color: #64748b; letter-spacing: 1px;">TOTAL SETTLEMENT</span>
-                <span id="payment-status-badge" style="background: #eab308; color: white; padding: 0.5rem 1.2rem; border-radius: 50px; font-size: 0.75rem; font-weight: 900; letter-spacing: 1px;">POLLING...</span>
+        <!-- Body -->
+        <div style="padding: 1rem; display: flex; flex-direction: column; align-items: center; flex: 1; justify-content: space-between;">
+            
+            <!-- QR Code -->
+            <div id="qr-container" style="width: 140px; height: 140px; background: white; padding: 0.2rem; border: 1px solid #e2e8f0; border-radius: 12px; display: flex; align-items: center; justify-content: center; position: relative;">
+                <div id="qr-loader" style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: white; border-radius: 12px;">
+                    <div class="loader" style="width: 20px; height: 20px; border: 3px solid #f1f5f9; border-bottom-color: #e11d48; border-radius: 50%; display: inline-block; animation: rotation 1s linear infinite;"></div>
+                </div>
+                <img id="qr-image" src="" style="width: 100%; height: 100%; object-fit: contain; display: none;">
             </div>
-            <div style="font-weight: 900; font-size: 2.5rem; font-family: 'Outfit'; color: #0f172a; text-align: left;" id="display-amount">$0.00</div>
-        </div>
 
-        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-            <a id="bakong-deeplink" href="#" class="btn btn-primary" style="width: 100%; background: #eab308; padding: 1.5rem; font-size: 1.1rem; font-weight: 900; border-radius: 20px; box-shadow: 0 15px 30px rgba(234, 179, 8, 0.3); display: none;">Open Merchant App</a>
+            <!-- Success Checkmark (Hidden) -->
+            <div id="success-checkmark" style="width: 140px; height: 140px; display: none; flex-direction: column; align-items: center; justify-content: center; background: white; border: 1px solid #f1f5f9; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
+                <div style="width: 48px; height: 48px; background: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 0.5rem; box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.2);">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </div>
+                <div style="color: #10b981; font-weight: 900; font-size: 0.7rem; letter-spacing: 1px;">CONFIRMED!</div>
+            </div>
+
+            <!-- Amount -->
+            <div style="text-align: center; margin-top: 0.5rem;">
+                <div style="font-size: 0.55rem; font-weight: 800; color: #94a3b8; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 0.2rem;">Payment Amount</div>
+                <div style="font-weight: 900; font-size: 1.5rem; color: #0f172a; font-family: 'Outfit'; display: flex; align-items: center; justify-content: center; gap: 0.2rem;" id="display-amount" data-usd="0.00">
+                    <span id="currency-symbol" style="font-size: 1rem; color: #6366f1;">$</span>
+                    <span id="amount-value">0.00</span>
+                </div>
+            </div>
+
+            <!-- Merchant Info -->
+            <div style="background: #f8fafc; border-radius: 8px; padding: 0.5rem; width: 100%; text-align: center; border: 1px solid #f1f5f9;">
+                <div style="font-weight: 800; font-size: 0.65rem; color: #1e293b; text-transform: uppercase;">{{ config('app.name', 'ElitePC Store') }}</div>
+                <div style="font-size: 0.55rem; font-weight: 600; color: #94a3b8;">ID: STORE_KHQR</div>
+            </div>
+
+            <!-- Currency Toggle -->
+            <div id="currency-toggle-container" style="display: flex; background: #f1f5f9; border-radius: 8px; padding: 0.15rem; width: 140px;">
+                <div id="btn-usd" onclick="setCurrency('usd')" style="flex: 1; text-align: center; padding: 0.3rem 0; border-radius: 6px; font-size: 0.6rem; font-weight: 800; color: #e11d48; cursor: pointer; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: 0.2s;">USD</div>
+                <div id="btn-khr" onclick="setCurrency('khr')" style="flex: 1; text-align: center; padding: 0.3rem 0; border-radius: 6px; font-size: 0.6rem; font-weight: 700; color: #94a3b8; cursor: pointer; background: transparent; box-shadow: none; transition: 0.2s;">KHR</div>
+            </div>
+
+            <!-- Done Button (Hidden) -->
+            <div id="done-btn-container" style="display: none; width: 100%;">
+                <button onclick="finishBakongPayment()" style="width: 100%; background: #e11d48; color: white; border: none; padding: 0.6rem; font-size: 0.75rem; font-weight: 800; border-radius: 8px; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#be123c'" onmouseout="this.style.background='#e11d48'">DONE</button>
+            </div>
+
+            <!-- Footer indicator -->
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.3rem; margin-top: 0.5rem;">
+                <div style="display: flex; align-items: center; gap: 0.4rem;">
+                    <div style="width: 12px; height: 12px; background: #e11d48; border-radius: 50%; display: flex; align-items: center; justify-content: center;"><div style="width: 4px; height: 4px; background: white; border-radius: 50%;"></div></div>
+                    <span style="font-size: 0.55rem; font-weight: 800; color: #64748b; letter-spacing: 0.5px;">POWERED BY BAKONG</span>
+                </div>
+                
+                <div id="status-badge-container" style="display: flex; align-items: center; gap: 0.3rem;">
+                    <div style="width: 4px; height: 4px; background: #10b981; border-radius: 50%; box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);"></div>
+                    <span id="payment-status-badge" style="font-size: 0.6rem; font-weight: 600; color: #10b981;">Ready to scan</span>
+                </div>
+
+                <div id="secure-footer" style="display: none; flex-direction: column; align-items: center; gap: 0.2rem; margin-top: 0.2rem;">
+                    <div style="display: flex; align-items: center; gap: 0.4rem; color: #e11d48; font-weight: 800; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        <span>NBC CERTIFIED - PAYMENT SECURED</span>
+                    </div>
+                    <div style="font-size: 0.5rem; color: #64748b; font-weight: 600;">Click Done to refresh invoice status</div>
+                </div>
+            </div>
+            
+            <a id="bakong-deeplink" href="#" class="btn btn-primary" style="display: none; width: 100%; background: #e11d48; padding: 0.6rem; font-size: 0.75rem; font-weight: 800; border-radius: 8px; text-align: center; margin-top: 0.5rem;">Open App</a>
             
             @if(config('app.debug'))
-            <button type="button" onclick="simulateBakongSuccess()" style="background: transparent; border: 1px dashed #cbd5e1; color: #94a3b8; padding: 1rem; border-radius: 16px; font-size: 0.8rem; font-weight: 800; cursor: pointer; transition: 0.3s;" onmouseover="this.style.borderColor='#eab308'; this.style.color='#eab308';">
-                [DEV] SIMULATE SUCCESSFUL ACQUISITION
+            <button type="button" onclick="simulateBakongSuccess()" style="background: transparent; border: 1px dashed #cbd5e1; color: #94a3b8; padding: 0.4rem; border-radius: 8px; font-size: 0.6rem; font-weight: 800; cursor: pointer; transition: 0.3s; width: 100%; margin-top: 0.5rem; display: none;" onmouseover="this.style.borderColor='#e11d48'; this.style.color='#e11d48';" id="simulate-btn">
+                [DEV] SIMULATE SUCCESS
             </button>
             @endif
-
-            <p style="font-size: 0.85rem; font-weight: 700; color: #94a3b8; letter-spacing: 0.5px;">ElitePC Secure Transaction Node: ACTIVE</p>
         </div>
     </div>
 </div>
@@ -230,6 +271,63 @@
 <script>
     let pollInterval = null;
     const paymentAccountId = "{{ $paymentAccount->id ?? '' }}";
+
+    function setCurrency(currency) {
+        const usdBtn = document.getElementById('btn-usd');
+        const khrBtn = document.getElementById('btn-khr');
+        const amountDisplay = document.getElementById('display-amount');
+        const symEl = document.getElementById('currency-symbol');
+        const valEl = document.getElementById('amount-value');
+        const baseUsd = parseFloat(amountDisplay.getAttribute('data-usd') || 0);
+
+        if(currency === 'usd') {
+            usdBtn.style.color = '#e11d48';
+            usdBtn.style.background = 'white';
+            usdBtn.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+            usdBtn.style.fontWeight = '800';
+
+            khrBtn.style.color = '#94a3b8';
+            khrBtn.style.background = 'transparent';
+            khrBtn.style.boxShadow = 'none';
+            khrBtn.style.fontWeight = '700';
+
+            symEl.innerText = '$';
+            symEl.style.color = '#6366f1';
+            valEl.innerText = baseUsd.toFixed(2);
+        } else {
+            khrBtn.style.color = '#e11d48';
+            khrBtn.style.background = 'white';
+            khrBtn.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+            khrBtn.style.fontWeight = '800';
+
+            usdBtn.style.color = '#94a3b8';
+            usdBtn.style.background = 'transparent';
+            usdBtn.style.boxShadow = 'none';
+            usdBtn.style.fontWeight = '700';
+
+            const khrAmount = Math.round(baseUsd * 4100);
+            symEl.innerText = '៛';
+            symEl.style.color = '#6366f1';
+            valEl.innerText = khrAmount.toLocaleString();
+        }
+    }
+
+    function showSuccessView() {
+        document.getElementById('qr-container').style.display = 'none';
+        document.getElementById('success-checkmark').style.display = 'flex';
+        document.getElementById('currency-toggle-container').style.display = 'none';
+        document.getElementById('done-btn-container').style.display = 'block';
+        document.getElementById('status-badge-container').style.display = 'none';
+        document.getElementById('secure-footer').style.display = 'flex';
+        const dlBtn = document.getElementById('bakong-deeplink');
+        if (dlBtn) dlBtn.style.display = 'none';
+        const simBtn = document.getElementById('simulate-btn');
+        if (simBtn) simBtn.style.display = 'none';
+    }
+
+    function finishBakongPayment() {
+        window.location.href = "{{ route('home') }}";
+    }
 
     // Virtual Card Live Sync
     const cardNameInput = document.getElementById('card_name_input');
@@ -267,7 +365,7 @@
     }
 
     function updatePaymentUI() {
-        const methods = ['cod', 'card', 'bakong'];
+        const methods = ['card', 'bakong'];
         const cardDetails = document.getElementById('card-details');
         
         methods.forEach(m => {
@@ -328,7 +426,7 @@
             } else if (method === 'card') {
                 submitBtn.innerHTML = '<span class="loader" style="width: 20px; height: 20px; border-width: 3px; border-bottom-color: white;"></span> Verifying...';
                 setTimeout(() => {
-                    window.location.href = data.redirect || "{{ route('order.success', ':id') }}".replace(':id', data.order_id || '');
+                    window.location.href = data.redirect || "{{ route('home') }}";
                 }, 2000);
             } else if (data.redirect) {
                 window.location.href = data.redirect;
@@ -370,15 +468,20 @@
 
             if (result.success) {
                 const data = result.data;
-                document.getElementById('qr-image').src = data.qr_image;
-                document.getElementById('qr-image').style.display = 'block';
-                document.getElementById('qr-loader').style.display = 'none';
-                document.getElementById('display-amount').innerHTML = (data.currency === 'USD' ? '$' : '៛') + parseFloat(data.amount).toLocaleString();
-                
-                if (data.deeplink) {
-                    const deeplinkBtn = document.getElementById('bakong-deeplink');
-                    deeplinkBtn.href = data.deeplink;
-                    deeplinkBtn.style.display = 'block';
+                if(data.qr_image) {
+                    document.getElementById('qr-loader').style.display = 'none';
+                    const img = document.getElementById('qr-image');
+                    img.src = data.qr_image;
+                    img.style.display = 'block';
+                }
+                if(data.deeplink) {
+                    const dl = document.getElementById('bakong-deeplink');
+                    dl.href = data.deeplink;
+                    dl.style.display = 'block';
+                }
+                if(data.amount) {
+                    document.getElementById('display-amount').setAttribute('data-usd', data.amount);
+                    setCurrency('usd'); // Defaults to USD initially
                 }
 
                 startPolling(data.md5, orderId);
@@ -410,11 +513,7 @@
             const result = await response.json();
             
             if (result.success) {
-                document.getElementById('payment-status-badge').innerHTML = 'VERIFIED [DEV]';
-                document.getElementById('payment-status-badge').style.background = '#10b981';
-                setTimeout(() => {
-                    window.location.href = `/order/success/${orderId}`;
-                }, 1500);
+                showSuccessView();
             }
         } catch (err) {
             console.error(err);
@@ -442,12 +541,7 @@
 
                 if (result.success && result.status === 'success') {
                     clearInterval(pollInterval);
-                    document.getElementById('payment-status-badge').innerHTML = 'VERIFIED';
-                    document.getElementById('payment-status-badge').style.background = '#10b981';
-                    
-                    setTimeout(() => {
-                        window.location.href = `/order/success/${orderId}`;
-                    }, 1500);
+                    showSuccessView();
                 }
             } catch (err) {
                 console.error('Network latency:', err);

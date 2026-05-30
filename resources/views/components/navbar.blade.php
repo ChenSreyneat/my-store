@@ -8,11 +8,11 @@
 </div>
 @endif
 
-<nav class="glass" style="position: fixed; top: {{ session('admin_impersonator_id') ? '45px' : '0' }}; left: 0; right: 0; z-index: 1000; padding: 1rem 0; margin: 1.5rem 2rem; border-radius: 20px; transition: top 0.3s;">
+<nav class="navbar-clean" style="position: fixed; top: {{ session('admin_impersonator_id') ? '45px' : '0' }}; left: 0; right: 0; z-index: 1000; padding: 1rem 0; background: #ffffff; border-bottom: 1px solid #e2e8f0; transition: top 0.3s;">
     <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
         <!-- Left: Logo & Mobile Toggle -->
         <div style="display: flex; align-items: center; flex: 1;">
-            <button class="mobile-only" id="mobile-toggle" style="background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text); padding: 8px; border-radius: 10px; margin-right: 1rem; cursor: pointer; display: none;">
+            <button class="mobile-only" id="mobile-toggle">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
             </button>
             
@@ -23,17 +23,17 @@
 
         <!-- Center: Desktop Navigation -->
         <div class="desktop-only" style="flex: 2; display: flex; justify-content: center; gap: 2.5rem; align-items: center;">
-            <a href="{{ route('home') }}" style="color: var(--text); text-decoration: none; font-weight: 600; opacity: 0.7; transition: 0.3s; font-size: 0.95rem;">Home</a>
+            <a href="{{ route('home') }}" style="color: var(--text); text-decoration: none; font-weight: 600; opacity: 0.7; transition: 0.3s; font-size: 0.95rem; font-family: 'Outfit';">Home</a>
             
             <div style="position: relative;" class="dropdown-parent" id="category-dropdown-parent">
-                <button id="category-btn" class="btn-dropdown" style="background: none; border: none; color: var(--text); font-weight: 600; opacity: 0.7; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: 0.3s;">
+                <button id="category-btn" class="btn-dropdown" style="background: none; border: none; color: var(--text); font-weight: 600; opacity: 0.7; font-size: 0.95rem; font-family: 'Outfit'; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: 0.3s;">
                     Categories
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"></path></svg>
                 </button>
                 <div id="category-menu" class="glass dropdown-menu" style="position: absolute; top: calc(100% + 1rem); left: 50%; transform: translateX(-50%); width: 240px; padding: 1rem; border-radius: 20px; opacity: 0; visibility: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: var(--card-shadow); pointer-events: none;">
                     <div style="display: grid; gap: 0.5rem;">
                         @foreach($navCategories as $cat)
-                        <a href="{{ route('category', $cat->slug) }}" style="display: block; padding: 0.8rem 1.2rem; border-radius: 12px; color: var(--text); text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: 0.2s;" onmouseover="this.style.background='var(--glass-bg)'; this.style.color='var(--primary)'" onmouseout="this.style.background='transparent'; this.style.color='var(--text)'">
+                        <a href="{{ route('category', $cat->slug) }}" style="display: block; padding: 0.8rem 1.2rem; border-radius: 12px; color: var(--text); text-decoration: none; font-weight: 600; font-size: 0.9rem; font-family: 'Outfit'; transition: 0.2s;" onmouseover="this.style.background='var(--glass-bg)'; this.style.color='var(--primary)'" onmouseout="this.style.background='transparent'; this.style.color='var(--text)'">
                             {{ $cat->name }}
                         </a>
                         @endforeach
@@ -41,16 +41,12 @@
                 </div>
             </div>
 
-            <a href="{{ route('about') }}" style="color: var(--text); text-decoration: none; font-weight: 600; opacity: 0.7; transition: 0.3s; font-size: 0.95rem;">About</a>
-            <a href="{{ route('contact') }}" style="color: var(--text); text-decoration: none; font-weight: 600; opacity: 0.7; transition: 0.3s; font-size: 0.95rem;">Contact</a>
+            <a href="{{ route('about') }}" style="color: var(--text); text-decoration: none; font-weight: 600; opacity: 0.7; transition: 0.3s; font-size: 0.95rem; font-family: 'Outfit';">About</a>
+            <a href="{{ route('contact') }}" style="color: var(--text); text-decoration: none; font-weight: 600; opacity: 0.7; transition: 0.3s; font-size: 0.95rem; font-family: 'Outfit';">Contact</a>
         </div>
 
         <!-- Right: Actions -->
         <div class="nav-actions" style="flex: 1; display: flex; gap: 1.2rem; align-items: center; justify-content: flex-end;">
-            <button onclick="window.toggleTheme()" class="btn-icon desktop-only" style="background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text); width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
-                <svg id="theme-icon-sun" style="display: none;" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-                <svg id="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-            </button>
 
             <a href="{{ route('favorites') }}" style="color: var(--text); background: var(--glass-bg); border: 1px solid var(--glass-border); width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; transition: 0.3s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text)'">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.84-8.84 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
@@ -65,7 +61,7 @@
             @auth
                 <div style="position: relative;" id="navUserDropdownParent">
                     <button id="navUserBtn" style="width: 44px; height: 44px; border-radius: 14px; overflow: hidden; border: 2px solid var(--glass-border); padding: 0; background: none; cursor: pointer; display: flex; transition: 0.3s;">
-                        <img src="{{ Auth::user()->profile_image ? asset('storage/'.Auth::user()->profile_image) : 'https://ui-avatars.com/api/?name='.Auth::user()->name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        <img src="{{ Auth::user()->profile_image_url }}" style="width: 100%; height: 100%; object-fit: cover;">
                     </button>
                     <div id="navUserMenu" class="glass" style="position: absolute; top: calc(100% + 1rem); right: 0; width: 220px; padding: 1rem; border-radius: 20px; opacity: 0; visibility: hidden; transition: 0.3s; box-shadow: var(--card-shadow); pointer-events: none; z-index: 1001;">
                         <div style="padding: 0.5rem 1rem 1rem 1rem; border-bottom: 1px solid var(--glass-border); margin-bottom: 0.5rem;">
@@ -95,7 +91,7 @@
             <div style="display: flex; align-items: center; gap: 0.8rem;">
                 <span class="text-gradient" style="font-size: 1.3rem; font-family: 'Outfit'; font-weight: 800;">ElitePC</span>
             </div>
-            <button id="mobile-close" style="background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text); padding: 8px; border-radius: 10px; cursor: pointer;">
+            <button id="mobile-close">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"></path></svg>
             </button>
         </div>
@@ -135,10 +131,7 @@
 
         <!-- Footer Actions -->
         <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--glass-border); display: flex; flex-direction: column; gap: 1rem;">
-            <button onclick="window.toggleTheme()" class="mobile-nav-link" style="width: 100%;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path></svg>
-                Switch Theme
-            </button>
+
             @auth
                 <a href="{{ route('profile') }}" class="btn btn-primary" style="padding: 1.2rem; text-align: center;">My Profile</a>
                 <button onclick="openLogoutModal()" class="btn btn-outline" style="width: 100%; padding: 1rem; border-color: #ef4444; color: #ef4444;">Log out</button>
@@ -155,7 +148,6 @@
     @media (max-width: 991px) {
         .desktop-only { display: none !important; }
         #mobile-toggle { display: flex !important; }
-        nav.glass { margin: 1rem !important; }
     }
     @media (min-width: 992px) {
         .mobile-only { display: none !important; }
@@ -201,6 +193,7 @@
         text-decoration: none;
         font-weight: 700;
         font-size: 1.1rem;
+        font-family: 'Outfit';
         transition: 0.3s;
         border: 1px solid transparent;
         background: none;
@@ -231,6 +224,7 @@
         font-weight: 600;
         opacity: 0.6;
         font-size: 1rem;
+        font-family: 'Outfit';
         display: block;
     }
 
@@ -245,43 +239,11 @@
         color: var(--primary) !important;
         opacity: 1 !important;
     }
+
+
 </style>
 
 <script>
-    // Robust Theme Logic
-    window.toggleTheme = () => {
-        const html = document.documentElement;
-        const currentTheme = html.getAttribute('data-theme') || 'dark';
-        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-        html.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-        window.updateThemeIcons(newTheme);
-    };
-
-    window.updateThemeIcons = (theme) => {
-        const sun = document.getElementById('theme-icon-sun');
-        const moon = document.getElementById('theme-icon-moon');
-        if(sun && moon) {
-            if(theme === 'light') {
-                sun.style.display = 'block';
-                moon.style.display = 'none';
-            } else {
-                sun.style.display = 'none';
-                moon.style.display = 'block';
-            }
-        }
-    };
-
-    // Initialize Theme
-    (function() {
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => window.updateThemeIcons(savedTheme));
-        } else {
-            window.updateThemeIcons(savedTheme);
-        }
-    })();
 
     // Dropdown Logic (Desktop)
     const categoryBtn = document.getElementById('category-btn');

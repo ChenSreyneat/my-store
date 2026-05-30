@@ -106,11 +106,11 @@ class OrderController extends Controller
                 return response()->json([
                     'status' => 'success',
                     'order_id' => $order->id,
-                    'redirect' => route('order.success', $order),
+                    'redirect' => route('home'),
                 ]);
             }
 
-            return redirect()->route('order.success', $order);
+            return redirect()->route('home')->with('success', 'Order placed successfully!');
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -130,5 +130,14 @@ class OrderController extends Controller
     {
         $orders = Auth::user()->orders()->with('items.product')->latest()->get();
         return view('my-orders', compact('orders'));
+    }
+
+    public function destroy(Order $order)
+    {
+        if ($order->user_id !== Auth::id()) {
+            abort(403);
+        }
+        $order->delete();
+        return back()->with('success', 'Order removed from history.');
     }
 }

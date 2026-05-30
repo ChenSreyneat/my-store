@@ -10,6 +10,25 @@
     .card-pagination { bottom: 10px !important; opacity: 0; transition: 0.3s; }
     .product-card:hover .card-pagination { opacity: 1; }
     .card-pagination .swiper-pagination-bullet { width: 6px; height: 6px; background: var(--primary) !important; }
+
+    .category-grid {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 4rem;
+    }
+    @media (max-width: 992px) {
+        .category-grid {
+            grid-template-columns: 1fr;
+            gap: 3rem;
+        }
+        .category-grid aside {
+            position: relative !important;
+        }
+        .category-grid aside .glass-card {
+            position: relative !important;
+            top: 0 !important;
+        }
+    }
 </style>
 @endsection
 
@@ -18,14 +37,7 @@
     <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100%; height: 400px; background: linear-gradient(180deg, rgba(99, 102, 241, 0.05) 0%, transparent 100%);"></div>
 
     <div class="container" style="position: relative; z-index: 2;">
-        <!-- Header -->
-        <div style="margin-bottom: 6rem; text-align: center;">
-            <div class="glass" style="display: inline-flex; padding: 0.6rem 2rem; border-radius: 50px; margin-bottom: 2rem; font-weight: 800; color: var(--primary); font-size: 0.9rem; letter-spacing: 2px;">ELITE COLLECTION</div>
-            <h1 style="font-size: clamp(3rem, 8vw, 5.5rem); font-weight: 900; font-family: 'Outfit'; line-height: 1; letter-spacing: -2px;">{{ $category->name }}</h1>
-            <p style="opacity: 0.7; max-width: 700px; margin: 2rem auto 0 auto; font-size: 1.2rem; line-height: 1.6;">{{ $category->description ?: 'Precision-engineered hardware components, curated for world-class performance and reliability.' }}</p>
-        </div>
-
-        <div style="display: grid; grid-template-columns: 280px 1fr; gap: 4rem;">
+        <div class="category-grid">
             <!-- Advanced Filter Sidebar -->
             <aside style="display: flex; flex-direction: column; gap: 3rem;">
                 <div class="glass-card" style="padding: 2.5rem; border-radius: 32px; position: sticky; top: 120px;">
@@ -76,6 +88,13 @@
 
             <!-- Product Intelligence Feed -->
             <div>
+                <!-- Header (Aligned with cards) -->
+                <div style="margin-bottom: 4rem; text-align: left;">
+                    <div class="glass" style="display: inline-flex; padding: 0.6rem 2rem; border-radius: 50px; margin-bottom: 2rem; font-weight: 800; color: var(--primary); font-size: 0.9rem; letter-spacing: 2px;">ELITE COLLECTION</div>
+                    <h1 style="font-weight: 900; font-family: 'Outfit'; line-height: 1; letter-spacing: -2px;">{{ $category->name }}</h1>
+                    <p style="opacity: 0.7; max-width: 700px; margin: 2rem 0 0 0; font-size: 1.2rem; line-height: 1.6;">{{ $category->description ?: 'Precision-engineered hardware components, curated for world-class performance and reliability.' }}</p>
+                </div>
+
                 <div class="responsive-grid grid-3">
                     @forelse($products as $product)
                     <x-product-card :product="$product" />

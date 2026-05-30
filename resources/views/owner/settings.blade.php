@@ -1,103 +1,241 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Operations Control - Owner')
+@section('title', 'Settings - Owner')
 
 @section('content')
-<section style="padding-bottom: 5rem;">
-    <!-- Strategic Header -->
-    <div style="margin-bottom: 6rem;" class="flex-wrap-md header-stack">
+<section style="padding-bottom: 5rem; font-family: 'Inter', sans-serif;">
+    <!-- Profile Header -->
+    <div style="margin-bottom: 5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
         <div>
-            <h1 style="font-size: clamp(3rem, 7vw, 4.5rem); font-weight: 900; font-family: 'Outfit'; letter-spacing: -3px; line-height: 1; margin-bottom: 1.5rem;">Operations <span class="text-gradient">Control</span></h1>
-            <p style="opacity: 0.6; font-size: 1.2rem; font-weight: 600; max-width: 600px;">Calibrate your merchant node parameters and secure your operative profile credentials.</p>
+            <h1 style="font-size: 2.5rem; font-weight: 800; color: #1e293b; margin-bottom: 0.5rem; line-height: 1.2;">
+                Store Settings ⚙️
+            </h1>
+            <p style="color: #64748b; font-size: 1.05rem; margin: 0; font-weight: 500;">Manage your profile and store details.</p>
         </div>
-        <div class="glass" style="padding: 0.8rem 2rem; border-radius: 50px; font-size: 0.85rem; font-weight: 800; color: var(--primary); letter-spacing: 2px; border-color: rgba(99, 102, 241, 0.3);">
-            NODE STATUS: ACTIVE
+        <div style="padding: 0.6rem 1.5rem; border-radius: 50px; font-size: 0.85rem; font-weight: 700; color: #10b981; background: #ecfdf5; border: 1px solid #d1fae5; box-shadow: 0 2px 10px rgba(16,185,129,0.1);">
+            STATUS: ACTIVE
         </div>
     </div>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(285px, 1fr)); gap: clamp(1.5rem, 3.5vw, 4rem);">
-        <!-- Business Intelligence Matrix -->
-        <div class="glass-card" style="padding: 4rem; border-radius: 48px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4rem;">
-                <h2 style="font-weight: 900; font-family: 'Outfit'; font-size: 2rem; display: flex; align-items: center; gap: 1.5rem; letter-spacing: -1px;">
-                    <div style="width: 52px; height: 52px; background: var(--primary); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: white; box-shadow: var(--primary-glow);">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+    <div style="display: grid; grid-template-columns: 300px 1fr; gap: 3rem;" class="dynamic-grid">
+        <!-- Sidebar Navigation -->
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <div style="padding: 2.5rem; text-align: center; margin-bottom: 1.5rem; background: #ffffff; border-radius: 24px; border: 1px solid #f1f5f9; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                <div style="position: relative; width: 120px; height: 120px; margin: 0 auto 1.5rem;">
+                    <img src="{{ Auth::user()->profile_image_url }}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; box-shadow: 0 10px 20px rgba(0,0,0,0.05);">
+                    <div style="position: absolute; bottom: 0; right: 0; width: 36px; height: 36px; background: white; border: 2px solid #eef2ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #10b981; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"></path></svg>
                     </div>
-                    Business Node
-                </h2>
-                <span class="glass" style="padding: 0.6rem 1.2rem; border-radius: 50px; font-size: 0.75rem; font-weight: 900; opacity: 0.6; letter-spacing: 2px;">GLOBAL TELEMETRY</span>
+                </div>
+                <h3 style="font-weight: 800; font-size: 1.3rem; margin-bottom: 0.25rem; color: #1e293b; margin-top: 0;">{{ Auth::user()->name }}</h3>
+                <p style="color: #64748b; font-size: 0.85rem; font-weight: 700; margin: 0;">STORE OWNER</p>
             </div>
 
-            <form action="{{ route('owner.settings.update') }}" method="POST" style="display: flex; flex-direction: column; gap: 3rem;">
-                @csrf
-                <div style="display: flex; flex-direction: column; gap: 0.8rem;">
-                    <label style="font-size: 0.75rem; font-weight: 800; letter-spacing: 1.5px; opacity: 0.6;">OFFICIAL STORE IDENTITY</label>
-                    <input type="text" name="name" value="{{ $store->name }}" required style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 1.2rem; border-radius: 16px; color: white; width: 100%;">
-                </div>
-
-                <div class="form-grid-admin">
-                    <div style="display: flex; flex-direction: column; gap: 0.8rem;">
-                        <label style="font-size: 0.75rem; font-weight: 800; letter-spacing: 1.5px; opacity: 0.6;">PUBLIC COMMS EMAIL</label>
-                        <input type="email" name="email" value="{{ $store->email }}" style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 1.2rem; border-radius: 16px; color: white; width: 100%;">
-                    </div>
-                    <div style="display: flex; flex-direction: column; gap: 0.8rem;">
-                        <label style="font-size: 0.75rem; font-weight: 800; letter-spacing: 1.5px; opacity: 0.6;">SUPPORT LINE (PHONE)</label>
-                        <input type="text" name="phone" value="{{ $store->phone }}" style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 1.2rem; border-radius: 16px; color: white; width: 100%;">
-                    </div>
-                </div>
-
-                <div style="display: flex; flex-direction: column; gap: 0.8rem;">
-                    <label style="font-size: 0.75rem; font-weight: 800; letter-spacing: 1.5px; opacity: 0.6; color: var(--primary);">LINKED BAKONG ACCOUNT (FINANCIAL NODE)</label>
-                    <select name="payment_account_id" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--primary); padding: 1.2rem; border-radius: 16px; color: var(--text); font-weight: 700; cursor: pointer;">
-                        <option value="">Select Payment Protocol</option>
-                        @foreach($paymentAccounts as $account)
-                        <option value="{{ $account->id }}" {{ $store->payment_account_id == $account->id ? 'selected' : '' }}>
-                            {{ $account->bank_name }} - {{ $account->account_number }} ({{ $account->account_name }})
-                        </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div style="display: flex; flex-direction: column; gap: 0.8rem;">
-                    <label style="font-size: 0.75rem; font-weight: 800; letter-spacing: 1.5px; opacity: 0.6;">PHYSICAL DEPLOYMENT (ADDRESS)</label>
-                    <input type="text" name="address" value="{{ $store->address }}" style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 1.2rem; border-radius: 16px; color: white; width: 100%;">
-                </div>
-
-                <div style="display: flex; flex-direction: column; gap: 0.8rem;">
-                    <label style="font-size: 0.75rem; font-weight: 800; letter-spacing: 1.5px; opacity: 0.6;">MISSION STATEMENT (DESCRIPTION)</label>
-                    <textarea name="description" style="min-height: 180px; resize: none; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 1.2rem; border-radius: 16px; color: white; width: 100%; line-height: 1.7;">{{ $store->description }}</textarea>
-                </div>
-
-                <div style="display: flex; justify-content: flex-end; margin-top: 2rem;" class="header-stack">
-                    <button type="submit" class="btn btn-primary" style="padding: 1.5rem 5rem; border-radius: 20px; font-weight: 900; font-size: 1.1rem; box-shadow: var(--primary-glow); width: 100%;">SYNCHRONIZE NODE</button>
-                </div>
-            </form>
+            <button onclick="scrollToSection('info-section')" class="nav-btn active">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                Personal Info
+            </button>
+            <button onclick="scrollToSection('business-node-section')" class="nav-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                Store Details
+            </button>
+            <button onclick="scrollToSection('elite-support-section')" class="nav-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                Help & Support
+            </button>
         </div>
 
-        <!-- Personal Operative Matrix -->
-        <div style="display: flex; flex-direction: column; gap: 4rem;">
-            <div class="glass-card" style="padding: 4rem; border-radius: 48px;">
-                <h3 style="font-weight: 900; font-family: 'Outfit'; font-size: 1.8rem; margin-bottom: 3rem; letter-spacing: -0.5px;">Operative Profile</h3>
-                <form action="{{ route('profile.update') }}" method="POST" style="display: flex; flex-direction: column; gap: 2.5rem;">
+        <!-- Main Content Area -->
+        <div style="display: flex; flex-direction: column; gap: 3rem;">
+            <!-- Identity Matrix -->
+            <div id="info-section" style="padding: 3rem; background: #ffffff; border-radius: 24px; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem;">
+                    <h2 style="font-weight: 800; font-size: 1.6rem; display: flex; align-items: center; gap: 1rem; color: #1e293b; margin: 0;">
+                        <div style="width: 40px; height: 40px; background: #eef2ff; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #6366f1;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                        </div>
+                        Personal Info
+                    </h2>
+                </div>
+
+                <form action="{{ route('profile.update') }}" method="POST" style="display: flex; flex-direction: column; gap: 2rem;">
                     @csrf @method('PATCH')
-                    <div style="display: flex; flex-direction: column; gap: 0.8rem;">
-                        <label style="font-size: 0.75rem; font-weight: 800; letter-spacing: 1.5px; opacity: 0.6;">IDENTITY NAME</label>
-                        <input type="text" name="name" value="{{ Auth::user()->name }}" required style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 1.2rem; border-radius: 16px; color: white; width: 100%;">
+                    <div class="form-row-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                        <div class="input-group">
+                            <label style="font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b;">Full Name</label>
+                            <input type="text" name="name" value="{{ old('name', Auth::user()->name) }}" required style="padding: 1rem 1.2rem; border-radius: 16px; border: 1px solid #e2e8f0; font-size: 0.95rem; outline: none; transition: 0.2s; background: #f8fafc;" onfocus="this.style.borderColor='#6366f1'; this.style.boxShadow='0 0 0 3px rgba(99,102,241,0.1)'" onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'">
+                            @error('name')
+                                <span style="color: #ef4444; font-size: 0.75rem; font-weight: 700; margin-top: 0.5rem;">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="input-group">
+                            <label style="font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b;">Email Address</label>
+                            <input type="email" value="{{ Auth::user()->email }}" disabled style="padding: 1rem 1.2rem; border-radius: 16px; border: 1px solid #e2e8f0; font-size: 0.95rem; color: #94a3b8; background: #f1f5f9; cursor: not-allowed;">
+                        </div>
                     </div>
-                    <div style="display: flex; flex-direction: column; gap: 0.8rem;">
-                        <label style="font-size: 0.75rem; font-weight: 800; letter-spacing: 1.5px; opacity: 0.6;">PRIMARY EMAIL</label>
-                        <input type="email" value="{{ Auth::user()->email }}" disabled style="opacity: 0.5; cursor: not-allowed; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 1.2rem; border-radius: 16px; color: white; width: 100%;">
+                    <div style="display: flex; justify-content: flex-end; margin-top: 1rem;">
+                        <button type="submit" style="padding: 0.9rem 2.5rem; border-radius: 50px; font-weight: 700; background: #6366f1; color: white; border: none; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(99,102,241,0.3);" onmouseover="this.style.background='#4f46e5'" onmouseout="this.style.background='#6366f1'">Save Changes</button>
                     </div>
-                    <button type="submit" class="btn btn-outline" style="width: 100%; padding: 1.4rem; border-radius: 20px; font-weight: 900; font-size: 1rem;">UPDATE CREDENTIALS</button>
                 </form>
             </div>
 
-            <div class="glass-card" style="padding: 4rem; border-radius: 48px; border-color: rgba(var(--secondary-rgb), 0.4); background: rgba(var(--secondary-rgb), 0.02);">
-                <h3 style="font-weight: 900; font-family: 'Outfit'; font-size: 1.8rem; margin-bottom: 1.5rem; letter-spacing: -0.5px;">Elite Support</h3>
-                <p style="opacity: 0.6; font-size: 1.05rem; line-height: 1.7; margin-bottom: 2.5rem; font-weight: 500;">Need architectural assistance with your merchant node? Our high-performance support team is active and ready for coordination.</p>
-                <a href="{{ route('contact') }}" class="btn btn-outline" style="width: 100%; border-color: var(--secondary); color: var(--secondary); padding: 1.4rem; border-radius: 20px; font-weight: 900; font-size: 1rem; justify-content: center;">OPEN COMMS CHANNEL</a>
+            <!-- Business Node -->
+            <div id="business-node-section" style="padding: 3rem; background: #ffffff; border-radius: 24px; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem;">
+                    <h2 style="font-weight: 800; font-size: 1.6rem; display: flex; align-items: center; gap: 1rem; color: #1e293b; margin: 0;">
+                        <div style="width: 40px; height: 40px; background: #ecfdf5; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #10b981;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                        </div>
+                        Store Details
+                    </h2>
+                </div>
+
+                <form action="{{ route('owner.settings.update') }}" method="POST" style="display: flex; flex-direction: column; gap: 2rem;">
+                    @csrf
+                    <div class="input-group">
+                        <label style="font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b;">Store Name</label>
+                        <input type="text" name="name" value="{{ $store->name }}" required style="padding: 1rem 1.2rem; border-radius: 16px; border: 1px solid #e2e8f0; font-size: 0.95rem; outline: none; transition: 0.2s; background: #f8fafc;" onfocus="this.style.borderColor='#6366f1'; this.style.boxShadow='0 0 0 3px rgba(99,102,241,0.1)'" onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'">
+                    </div>
+
+                    <div class="form-row-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                        <div class="input-group">
+                            <label style="font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b;">Contact Email</label>
+                            <input type="email" name="email" value="{{ $store->email }}" style="padding: 1rem 1.2rem; border-radius: 16px; border: 1px solid #e2e8f0; font-size: 0.95rem; outline: none; transition: 0.2s; background: #f8fafc;" onfocus="this.style.borderColor='#6366f1'; this.style.boxShadow='0 0 0 3px rgba(99,102,241,0.1)'" onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'">
+                        </div>
+                        <div class="input-group">
+                            <label style="font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b;">Phone Number</label>
+                            <input type="text" name="phone" value="{{ $store->phone }}" style="padding: 1rem 1.2rem; border-radius: 16px; border: 1px solid #e2e8f0; font-size: 0.95rem; outline: none; transition: 0.2s; background: #f8fafc;" onfocus="this.style.borderColor='#6366f1'; this.style.boxShadow='0 0 0 3px rgba(99,102,241,0.1)'" onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label style="font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: #6366f1;">Payment Account (Bakong)</label>
+                        <select name="payment_account_id" style="padding: 1rem 1.2rem; border-radius: 16px; border: 1px solid #e0e7ff; font-size: 0.95rem; outline: none; transition: 0.2s; background: #f8fafc;" onfocus="this.style.borderColor='#6366f1'; this.style.boxShadow='0 0 0 3px rgba(99,102,241,0.1)'" onblur="this.style.borderColor='#e0e7ff'; this.style.boxShadow='none'">
+                            <option value="">Select Payment Account</option>
+                            @foreach($paymentAccounts as $account)
+                            <option value="{{ $account->id }}" {{ $store->payment_account_id == $account->id ? 'selected' : '' }}>
+                                {{ $account->account_id }} - {{ $account->currency }} ({{ $account->account_name }})
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label style="font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b;">Store Address</label>
+                        <input type="text" name="address" value="{{ $store->address }}" style="padding: 1rem 1.2rem; border-radius: 16px; border: 1px solid #e2e8f0; font-size: 0.95rem; outline: none; transition: 0.2s; background: #f8fafc;" onfocus="this.style.borderColor='#6366f1'; this.style.boxShadow='0 0 0 3px rgba(99,102,241,0.1)'" onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'">
+                    </div>
+
+                    <div class="input-group">
+                        <label style="font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b;">Store Description</label>
+                        <textarea name="description" style="padding: 1rem 1.2rem; border-radius: 16px; border: 1px solid #e2e8f0; font-size: 0.95rem; outline: none; transition: 0.2s; background: #f8fafc; min-height: 120px; resize: vertical;" onfocus="this.style.borderColor='#6366f1'; this.style.boxShadow='0 0 0 3px rgba(99,102,241,0.1)'" onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'">{{ $store->description }}</textarea>
+                    </div>
+
+                    <div style="display: flex; justify-content: flex-end; margin-top: 1rem;">
+                        <button type="submit" style="padding: 0.9rem 2.5rem; border-radius: 50px; font-weight: 700; background: #6366f1; color: white; border: none; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(99,102,241,0.3);" onmouseover="this.style.background='#4f46e5'" onmouseout="this.style.background='#6366f1'">Save Store Details</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Elite Support -->
+            <div id="elite-support-section" style="padding: 3rem; background: #fffcfdf8; border-radius: 24px; border: 1px solid #fdf2f8; box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                    <h2 style="font-weight: 800; font-size: 1.6rem; display: flex; align-items: center; gap: 1rem; color: #1e293b; margin: 0;">
+                        <div style="width: 40px; height: 40px; background: #fdf2f8; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #ec4899;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                        </div>
+                        Help & Support
+                    </h2>
+                </div>
+                
+                <p style="font-size: 1.05rem; line-height: 1.6; margin-bottom: 2.5rem; color: #64748b;">Need assistance with your store? Our support team is ready to help you resolve any issues.</p>
+                
+                <div style="display: flex; justify-content: flex-start;">
+                    <a href="{{ route('contact') }}" style="padding: 0.9rem 2.5rem; border-radius: 50px; font-weight: 700; background: #ec4899; color: white; border: none; cursor: pointer; transition: 0.2s; text-decoration: none; box-shadow: 0 4px 15px rgba(236,72,153,0.3);" onmouseover="this.style.background='#db2777'" onmouseout="this.style.background='#ec4899'">Contact Support</a>
+                </div>
             </div>
         </div>
     </div>
 </section>
+
+<style>
+    .nav-btn {
+        background: transparent;
+        border: none;
+        padding: 1.2rem 1.5rem;
+        border-radius: 16px;
+        color: #64748b;
+        font-weight: 700;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+        cursor: pointer;
+        transition: 0.2s;
+        text-align: left;
+    }
+    .nav-btn:hover {
+        background: #f8fafc;
+        color: #1e293b;
+    }
+    .nav-btn.active {
+        background: #eef2ff;
+        color: #6366f1;
+    }
+    .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+    }
+
+    @media (max-width: 992px) {
+        .dynamic-grid {
+            grid-template-columns: 1fr !important;
+            gap: 2rem !important;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .form-row-grid {
+            grid-template-columns: 1fr !important;
+            gap: 1.5rem !important;
+        }
+    }
+</style>
+
+<script>
+    function scrollToSection(id) {
+        document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // Update active nav button
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.getAttribute('onclick').includes(id)) {
+                btn.classList.add('active');
+            }
+        });
+    }
+
+    // Auto update active nav on scroll
+    window.addEventListener('scroll', () => {
+        const sections = ['info-section', 'business-node-section', 'elite-support-section'];
+        let current = '';
+        
+        sections.forEach(s => {
+            const el = document.getElementById(s);
+            if (el) {
+                const rect = el.getBoundingClientRect();
+                if (rect.top <= 250) current = s;
+            }
+        });
+
+        if (current) {
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('onclick').includes(current)) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+    });
+</script>
 @endsection

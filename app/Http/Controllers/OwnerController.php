@@ -49,25 +49,34 @@ class OwnerController extends Controller
             'category_id' => 'required|exists:categories,id',
             'brand_id' => 'required|exists:brands,id',
             'product_type_id' => 'required|exists:product_types,id',
-            'image' => 'required|image|max:5120',
+            'images' => 'required|array|min:1',
+            'images.*' => 'image|max:5120',
         ]);
 
-        $data = $request->except('image');
+        $data = $request->except(['image', 'images']);
         $data['store_id'] = Auth::user()->store_id;
         
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('products', 'public');
+        if ($request->hasFile('images')) {
+            $firstImage = $request->file('images')[0];
+            $path = $firstImage->store('products', 'public');
             $data['image_url'] = $path;
         }
         
         $product = Product::create($data);
         
-        if (isset($path)) {
-            \App\Models\ProductImage::create([
-                'product_id' => $product->id,
-                'image_url' => $path,
-                'is_primary' => true
-            ]);
+        if ($request->hasFile('images')) {
+            foreach($request->file('images') as $index => $file) {
+                if ($index === 0) {
+                    $img_path = $path;
+                } else {
+                    $img_path = $file->store('products', 'public');
+                }
+                \App\Models\ProductImage::create([
+                    'product_id' => $product->id,
+                    'image_url' => $img_path,
+                    'is_primary' => ($index === 0)
+                ]);
+            }
         }
 
         return back()->with('success', 'Hardware unit registered successfully.');
@@ -154,25 +163,40 @@ class OwnerController extends Controller
             'category_id' => 'required|exists:categories,id',
             'brand_id' => 'required|exists:brands,id',
             'product_type_id' => 'required|exists:product_types,id',
-            'image' => 'nullable|image|max:5120',
+            'images' => 'nullable|array',
+            'images.*' => 'image|max:5120',
         ]);
 
-        $data = $request->except('image');
+        $data = $request->except(['image', 'images']);
         
-        if ($request->hasFile('image')) {
-            // Delete old image if exists
+        if ($request->hasFile('images')) {
+            // Delete old images
             if ($product->image_url) {
                 \Illuminate\Support\Facades\Storage::disk('public')->delete($product->image_url);
             }
             
-            $path = $request->file('image')->store('products', 'public');
+            $oldImages = \App\Models\ProductImage::where('product_id', $product->id)->get();
+            foreach($oldImages as $oldImg) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($oldImg->image_url);
+                $oldImg->delete();
+            }
+            
+            $firstImage = $request->file('images')[0];
+            $path = $firstImage->store('products', 'public');
             $data['image_url'] = $path;
 
-            // Update primary image in product_images table
-            \App\Models\ProductImage::updateOrCreate(
-                ['product_id' => $product->id, 'is_primary' => true],
-                ['image_url' => $path]
-            );
+            foreach($request->file('images') as $index => $file) {
+                if ($index === 0) {
+                    $img_path = $path;
+                } else {
+                    $img_path = $file->store('products', 'public');
+                }
+                \App\Models\ProductImage::create([
+                    'product_id' => $product->id,
+                    'image_url' => $img_path,
+                    'is_primary' => ($index === 0)
+                ]);
+            }
         }
         
         $product->update($data);
