@@ -26,10 +26,11 @@
                 @method('PUT')
                 
                 <div style="display: flex; flex-direction: column; gap: 0.5rem; flex: 1; min-width: 280px;">
-                    <label style="font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b;">Order Status</label>
+                    <label style="font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b;">Fulfillment Status</label>
                     <select name="status" required style="padding: 0.8rem 1rem; border-radius: 12px; border: 1px solid #e2e8f0; font-size: 0.95rem; outline: none; transition: 0.2s; background: white;" onfocus="this.style.borderColor='#ec4899'; this.style.boxShadow='0 0 0 3px rgba(236,72,153,0.1)'" onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'">
-                        <option value="pending" {{ $editingOrder->status == 'pending' ? 'selected' : '' }}>Pending</option>
-                        <option value="paid" {{ $editingOrder->status == 'paid' ? 'selected' : '' }}>Paid</option>
+                        @if(in_array($editingOrder->status, ['pending', 'paid']))
+                            <option value="{{ $editingOrder->status }}" selected>{{ $editingOrder->status === 'paid' ? 'Processing' : 'Pending' }}</option>
+                        @endif
                         <option value="shipped" {{ $editingOrder->status == 'shipped' ? 'selected' : '' }}>Shipped</option>
                         <option value="completed" {{ $editingOrder->status == 'completed' ? 'selected' : '' }}>Completed</option>
                         <option value="cancelled" {{ $editingOrder->status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
@@ -56,7 +57,8 @@
                     <th style="padding: 1.25rem 1.5rem; color: #64748b; font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; border-bottom: 2px solid #f1f5f9;">Customer</th>
                     <th style="padding: 1.25rem 1.5rem; color: #64748b; font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; border-bottom: 2px solid #f1f5f9;">Items</th>
                     <th style="padding: 1.25rem 1.5rem; color: #64748b; font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; border-bottom: 2px solid #f1f5f9;">Total</th>
-                    <th style="padding: 1.25rem 1.5rem; color: #64748b; font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; border-bottom: 2px solid #f1f5f9;">Status</th>
+                    <th style="padding: 1.25rem 1.5rem; color: #64748b; font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; border-bottom: 2px solid #f1f5f9;">Payment</th>
+                    <th style="padding: 1.25rem 1.5rem; color: #64748b; font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; border-bottom: 2px solid #f1f5f9;">Fulfillment</th>
                     <th style="padding: 1.25rem 1.5rem; color: #64748b; font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; border-bottom: 2px solid #f1f5f9;">Date</th>
                     <th style="padding: 1.25rem 1.5rem; color: #64748b; font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; border-bottom: 2px solid #f1f5f9; text-align: right;">Action</th>
                 </tr>
@@ -91,28 +93,54 @@
                     <td style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #f1f5f9; font-weight: 800; font-size: 1.1rem; color: #0f172a;">${{ number_format($ownerSubtotal, 2) }}</td>
                     <td style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #f1f5f9;">
                         @php
+                            $isPaidByCustomer = in_array($order->status, ['paid', 'shipped', 'completed']);
+                            if ($order->is_settled) {
+                                $paymentText = 'Settled';
+                                $paymentStyle = ['bg' => '#ede9fe', 'color' => '#7c3aed'];
+                            } elseif ($isPaidByCustomer) {
+                                $paymentText = 'Paid';
+                                $paymentStyle = ['bg' => '#d1fae5', 'color' => '#059669'];
+                            } else {
+                                $paymentText = 'Unpaid';
+                                $paymentStyle = ['bg' => '#fee2e2', 'color' => '#dc2626'];
+                            }
+                        @endphp
+                        <span style="padding: 0.35rem 0.6rem; border-radius: 5px; font-size: 0.65rem; font-weight: 800; background: {{ $paymentStyle['bg'] }}; color: {{ $paymentStyle['color'] }}; text-transform: uppercase; letter-spacing: 0.5px;">
+                            {{ $paymentText }}
+                        </span>
+                    </td>
+                    <td style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #f1f5f9;">
+                        @php
                             $statusStyles = [
                                 'pending' => ['bg' => '#fef3c7', 'color' => '#d97706'],
-                                'paid' => ['bg' => '#d1fae5', 'color' => '#059669'],
+                                'paid' => ['bg' => '#f1f5f9', 'color' => '#475569'],
                                 'shipped' => ['bg' => '#dbeafe', 'color' => '#2563eb'],
-                                'completed' => ['bg' => '#ede9fe', 'color' => '#7c3aed'],
+                                'completed' => ['bg' => '#d1fae5', 'color' => '#059669'],
                                 'cancelled' => ['bg' => '#fee2e2', 'color' => '#dc2626']
                             ];
-                            $style = $statusStyles[$order->status] ?? ['bg' => '#f1f5f9', 'color' => '#475569'];
+                            $orderStyle = $statusStyles[$order->status] ?? ['bg' => '#f1f5f9', 'color' => '#475569'];
                         @endphp
-                        <span style="padding: 0.35rem 0.8rem; border-radius: 50px; font-size: 0.72rem; font-weight: 800; background: {{ $style['bg'] }}; color: {{ $style['color'] }}; text-transform: uppercase; letter-spacing: 0.5px;">
-                            {{ $order->status }}
+                        <span style="padding: 0.35rem 0.6rem; border-radius: 5px; font-size: 0.65rem; font-weight: 800; background: {{ $orderStyle['bg'] }}; color: {{ $orderStyle['color'] }}; text-transform: uppercase; letter-spacing: 0.5px;">
+                            {{ $order->status === 'paid' ? 'processing' : $order->status }}
                         </span>
                     </td>
                     <td style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #f1f5f9; color: #64748b; font-size: 0.9rem; font-weight: 500;">{{ $order->created_at->format('M d, Y') }}</td>
-                    <td style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #f1f5f9; text-align: right;">
+                    <td style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #f1f5f9; text-align: right; white-space: nowrap;">
+                        @if($order->status !== 'completed' && $order->status !== 'cancelled')
+                        <form action="{{ route('owner.orders.update', $order->id) }}" method="POST" style="display: inline-block; margin-right: 0.25rem;">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="status" value="completed">
+                            <button type="submit" style="padding: 0.5rem 1rem; font-size: 0.75rem; border-radius: 50px; font-weight: 700; color: #10b981; background: #ecfdf5; border: 1px solid #a7f3d0; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#d1fae5'" onmouseout="this.style.background='#ecfdf5'" title="Mark as Completed">Complete</button>
+                        </form>
+                        @endif
                         <a href="{{ route('owner.orders', ['edit' => $order->id]) }}" style="padding: 0.5rem 1rem; font-size: 0.75rem; border-radius: 50px; font-weight: 700; color: #ec4899; background: #fdf2f8; border: 1px solid #fbcfe8; text-decoration: none; transition: 0.2s;" onmouseover="this.style.background='#fce7f3'" onmouseout="this.style.background='#fdf2f8'">Edit</a>
                     </td>
                 </tr>
                 @endforeach
                 @if($orders->isEmpty())
                 <tr>
-                    <td colspan="7" style="padding: 6rem 1.5rem; text-align: center; color: #64748b; font-weight: 700; font-size: 0.95rem;">NO ORDERS FOUND</td>
+                    <td colspan="8" style="padding: 6rem 1.5rem; text-align: center; color: #64748b; font-weight: 700; font-size: 0.95rem;">NO ORDERS FOUND</td>
                 </tr>
                 @endif
             </tbody>
@@ -170,16 +198,49 @@
                         <div style="color: #64748b; font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; margin-bottom: 0.2rem;">TOTAL</div>
                         <div style="font-weight: 800; font-size: 1.15rem; color: #0f172a;">${{ number_format($ownerSubtotal, 2) }}</div>
                     </div>
-                    <div style="text-align: right;">
+                    <div style="text-align: right; display: flex; flex-direction: column; gap: 0.4rem; align-items: flex-end;">
                         <div style="color: #64748b; font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; margin-bottom: 0.2rem;">STATUS</div>
-                        <span style="display: inline-block; padding: 0.25rem 0.65rem; border-radius: 50px; font-size: 0.65rem; font-weight: 800; background: {{ $style['bg'] }}; color: {{ $style['color'] }}; text-transform: uppercase;">
-                            {{ $order->status }}
+                        @php
+                            $isPaidByCustomer = in_array($order->status, ['paid', 'shipped', 'completed']);
+                            if ($order->is_settled) {
+                                $paymentText = 'Settled';
+                                $paymentStyle = ['bg' => '#ede9fe', 'color' => '#7c3aed'];
+                            } elseif ($isPaidByCustomer) {
+                                $paymentText = 'Paid';
+                                $paymentStyle = ['bg' => '#d1fae5', 'color' => '#059669'];
+                            } else {
+                                $paymentText = 'Unpaid';
+                                $paymentStyle = ['bg' => '#fee2e2', 'color' => '#dc2626'];
+                            }
+                            
+                            $statusStyles = [
+                                'pending' => ['bg' => '#fef3c7', 'color' => '#d97706'],
+                                'paid' => ['bg' => '#f1f5f9', 'color' => '#475569'],
+                                'shipped' => ['bg' => '#dbeafe', 'color' => '#2563eb'],
+                                'completed' => ['bg' => '#d1fae5', 'color' => '#059669'],
+                                'cancelled' => ['bg' => '#fee2e2', 'color' => '#dc2626']
+                            ];
+                            $orderStyle = $statusStyles[$order->status] ?? ['bg' => '#f1f5f9', 'color' => '#475569'];
+                        @endphp
+                        <span style="display: inline-block; padding: 0.25rem 0.65rem; border-radius: 5px; font-size: 0.65rem; font-weight: 800; background: {{ $paymentStyle['bg'] }}; color: {{ $paymentStyle['color'] }}; text-transform: uppercase;">
+                            PAY: {{ $paymentText }}
+                        </span>
+                        <span style="display: inline-block; padding: 0.25rem 0.65rem; border-radius: 5px; font-size: 0.65rem; font-weight: 800; background: {{ $orderStyle['bg'] }}; color: {{ $orderStyle['color'] }}; text-transform: uppercase;">
+                            ORDER: {{ $order->status === 'paid' ? 'processing' : $order->status }}
                         </span>
                     </div>
                 </div>
 
-                <div>
-                    <a href="{{ route('owner.orders', ['edit' => $order->id]) }}" style="width: 100%; display: flex; align-items: center; justify-content: center; padding: 0.6rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; color: #ec4899; background: #fdf2f8; border: 1px solid #fbcfe8; text-decoration: none; transition: 0.2s;" onmouseover="this.style.background='#fce7f3'" onmouseout="this.style.background='#fdf2f8'">Edit</a>
+                <div style="display: flex; gap: 0.5rem;">
+                    @if($order->status !== 'completed' && $order->status !== 'cancelled')
+                    <form action="{{ route('owner.orders.update', $order->id) }}" method="POST" style="flex: 1; margin: 0;">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="status" value="completed">
+                        <button type="submit" style="width: 100%; display: flex; align-items: center; justify-content: center; padding: 0.6rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; color: #10b981; background: #ecfdf5; border: 1px solid #a7f3d0; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#d1fae5'" onmouseout="this.style.background='#ecfdf5'">Complete</button>
+                    </form>
+                    @endif
+                    <a href="{{ route('owner.orders', ['edit' => $order->id]) }}" style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 0.6rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; color: #ec4899; background: #fdf2f8; border: 1px solid #fbcfe8; text-decoration: none; transition: 0.2s;" onmouseover="this.style.background='#fce7f3'" onmouseout="this.style.background='#fdf2f8'">Edit</a>
                 </div>
             </div>
             @endforeach

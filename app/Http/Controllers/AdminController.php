@@ -22,6 +22,12 @@ class AdminController extends Controller
             'stores' => Store::count(),
             'products' => Product::count(),
             'categories' => Category::count(),
+            'pending_payouts' => \App\Models\OrderItem::whereHas('order', function($q) {
+                $q->where('status', 'completed')->where('is_settled', false);
+            })->sum(\DB::raw('quantity * price')),
+            'settled_payouts' => \App\Models\OrderItem::whereHas('order', function($q) {
+                $q->where('status', 'completed')->where('is_settled', true);
+            })->sum(\DB::raw('quantity * price')),
         ];
         return view('admin.dashboard', compact('stats'));
     }
@@ -339,22 +345,251 @@ class AdminController extends Controller
                 return $store;
             })->sortByDesc('revenue');
 
-        return view('admin.reports', compact('monthlyRevenue', 'orderStats', 'topProducts', 'storePerformance'));
+        // Product Payout Report Details
+        $productPayouts = Product::with('store')
+            ->get()
+            ->map(function($product) {
+                // Calculate settled sales (completed and settled orders)
+                $settledSales = \App\Models\OrderItem::where('product_id', $product->id)
+                    ->whereHas('order', function($q) {
+                        $q->where('status', 'completed')->where('is_settled', true);
+                    });
+                $product->settled_units = $settledSales->sum('quantity');
+                $product->settled_payout = $settledSales->sum(\DB::raw('quantity * price'));
+
+                // Calculate pending sales (completed and unsettled orders)
+                $pendingSales = \App\Models\OrderItem::where('product_id', $product->id)
+                    ->whereHas('order', function($q) {
+                        $q->where('status', 'completed')->where('is_settled', false);
+                    });
+                $product->pending_units = $pendingSales->sum('quantity');
+                $product->pending_payout = $pendingSales->sum(\DB::raw('quantity * price'));
+                
+                $product->total_completed_sold = $product->settled_units + $product->pending_units;
+
+                return $product;
+            })
+            ->filter(function($product) {
+                return $product->total_completed_sold > 0;
+            })
+            ->sortByDesc('pending_payout');
+
+        return view('admin.reports', compact('monthlyRevenue', 'orderStats', 'topProducts', 'storePerformance', 'productPayouts'));
+    }
+
+    public function storeOrders($id)
+    {
+        $store = Store::findOrFail($id);
+        $orders = Order::whereHas('items.product', function($q) use ($id) {
+            $q->where('store_id', $id);
+        })->where('is_settled', false)->with(['user', 'items.product'])->latest()->paginate(20);
+        
+        $paidOrders = Order::whereHas('items.product', function($q) use ($id) {
+            $q->where('store_id', $id);
+        })->where('status', 'completed')->where('is_settled', false)->with('items.product')->get();
+        
+        $payoutTotal = 0;
+        foreach ($paidOrders as $order) {
+            foreach ($order->items as $item) {
+                if ($item->product->store_id == $store->id) {
+                    $payoutTotal += $item->price * $item->quantity;
+                }
+            }
+        }
+        
+        return view('admin.store_orders', compact('store', 'orders', 'paidOrders', 'payoutTotal'));
+    }
+
+    public function payoutStore($id)
+    {
+        $store = Store::with('paymentAccount')->findOrFail($id);
+        
+        if (!$store->paymentAccount) {
+            return response()->json(['success' => false, 'message' => 'Store has no payment account linked.']);
+        }
+
+        $paidOrders = Order::whereHas('items.product', function($q) use ($id) {
+            $q->where('store_id', $id);
+        })->where('status', 'completed')->where('is_settled', false)->with('items.product')->get();
+
+        if ($paidOrders->isEmpty()) {
+            return response()->json(['success' => false, 'message' => 'No unpaid orders available for payout.']);
+        }
+
+        $payoutTotal = 0;
+        foreach ($paidOrders as $order) {
+            foreach ($order->items as $item) {
+                if ($item->product->store_id == $store->id) {
+                    $payoutTotal += $item->price * $item->quantity;
+                }
+            }
+        }
+
+        $currency = $store->paymentAccount->currency ?? 'USD';
+        $displayAmount = ($currency === 'USD') ? round($payoutTotal, 2) : round($payoutTotal * 4100, 0);
+
+        $khqrString = \App\Http\Controllers\BakongController::generateKhqrString(
+            $store->paymentAccount->account_id,
+            $store->paymentAccount->account_name,
+            $store->paymentAccount->account_city ?? 'Phnom Penh',
+            $displayAmount,
+            $currency,
+            'PAYOUT-' . $store->id . '-' . time()
+        );
+
+        $qrImage = null;
+        try {
+            $relayUrl = env('API_GENERATE_QR_BAKONG', 'https://api.bakongrelay.com/v1/generate_khqr_image');
+            $templateUrl = env('QR_TEMPLATE_URL', 'https://raw.githubusercontent.com/bsthen/bakong-khqr/main/bakong_khqr/template.png');
+
+            $relayResponse = \Illuminate\Support\Facades\Http::timeout(10)->post($relayUrl, [
+                'qr' => $khqrString,
+                'source' => $templateUrl
+            ]);
+
+            if ($relayResponse->successful()) {
+                $rawBody = $relayResponse->body();
+                if (str_starts_with(trim($rawBody), '{')) {
+                    $json = json_decode($rawBody, true);
+                    $imageData = $json['data'] ?? $json['qr_image'] ?? $json['image'] ?? null;
+                    if (is_array($imageData)) {
+                        $imageData = $imageData['image'] ?? $imageData['base64'] ?? $imageData['url'] ?? $imageData['data'] ?? null;
+                    }
+                    if (is_string($imageData) && !str_starts_with(trim($imageData), '{')) {
+                        $qrImage = str_starts_with($imageData, 'data:image') ? $imageData : 'data:image/png;base64,' . $imageData;
+                    }
+                }
+                
+                if (!$qrImage) {
+                    $qrImage = 'data:image/png;base64,' . base64_encode($rawBody);
+                }
+            }
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('[KHQR] Relay API failed: ' . $e->getMessage());
+        }
+
+        if (!$qrImage) {
+            $qrImage = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' . urlencode($khqrString);
+        }
+        
+        return response()->json([
+            'success' => true,
+            'qr_url' => $qrImage,
+            'account_id' => $store->paymentAccount->account_id,
+            'account_name' => $store->paymentAccount->account_name,
+            'md5' => md5($khqrString)
+        ]);
+    }
+
+    public function checkPayoutMd5(Request $request, $id)
+    {
+        $request->validate(['md5' => 'required|string']);
+        
+        $token = env('BAKONG_API_TOKEN');
+        $baseUrl = env('BAKONG_BASE_URL', 'https://api-bakong.nbc.org.kh');
+        
+        if (!$token) {
+            // Simulate success for demo if no token
+            $this->markOrdersSettled($id);
+            return response()->json(['success' => true, 'message' => 'Simulated success (No token).']);
+        }
+        
+        try {
+            $response = \Illuminate\Support\Facades\Http::withHeaders([
+                'Authorization' => 'Bearer ' . $token,
+                'Content-Type'  => 'application/json'
+            ])->timeout(10)->post($baseUrl . '/v1/check_transaction_by_md5', [
+                'md5' => $request->md5
+            ]);
+
+            $data = $response->json();
+            $responseCode = $data['responseCode'] ?? ($data['status']['code'] ?? null);
+            $isSuccess = ($responseCode === 0 || $responseCode === '0' || $responseCode === '00');
+
+            if ($isSuccess) {
+                $this->markOrdersSettled($id);
+            }
+
+            return response()->json([
+                'success' => $isSuccess,
+                'message' => $isSuccess ? 'Payout verified successfully!' : 'Transaction not found or pending.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Connection to Bakong failed.']);
+        }
+    }
+
+    private function markOrdersSettled($storeId)
+    {
+        $paidOrders = Order::whereHas('items.product', function($q) use ($storeId) {
+            $q->where('store_id', $storeId);
+        })->with(['items.product'])->where('status', 'completed')->where('is_settled', false)->get();
+
+        if ($paidOrders->isEmpty()) return;
+
+        $payoutTotal = 0;
+        $productTotals = [];
+
+        foreach ($paidOrders as $order) {
+            foreach ($order->items as $item) {
+                if ($item->product->store_id == $storeId) {
+                    $itemTotal = $item->price * $item->quantity;
+                    $payoutTotal += $itemTotal;
+
+                    if (!isset($productTotals[$item->product_id])) {
+                        $productTotals[$item->product_id] = [
+                            'quantity' => 0,
+                            'amount' => 0,
+                        ];
+                    }
+                    $productTotals[$item->product_id]['quantity'] += $item->quantity;
+                    $productTotals[$item->product_id]['amount'] += $itemTotal;
+                }
+            }
+            $order->update(['is_settled' => true]);
+        }
+
+        if ($payoutTotal > 0) {
+            $payout = \App\Models\Payout::create([
+                'store_id' => $storeId,
+                'amount' => $payoutTotal,
+            ]);
+
+            foreach ($productTotals as $productId => $totals) {
+                \App\Models\PayoutItem::create([
+                    'payout_id' => $payout->id,
+                    'product_id' => $productId,
+                    'quantity' => $totals['quantity'],
+                    'amount' => $totals['amount'],
+                ]);
+            }
+        }
     }
 
     public function settlement()
     {
         $stores = Store::with(['owner', 'paymentAccount'])->get()->map(function($store) {
-            // Calculate total revenue for this store from paid orders
+            // Calculate total revenue for this store from completed orders
             $store->total_revenue = \App\Models\OrderItem::whereHas('product', function($q) use ($store) {
                 $q->where('store_id', $store->id);
             })->whereHas('order', function($q) {
-                $q->where('status', 'paid');
+                $q->where('status', 'completed')->where('is_settled', false);
             })->sum(\DB::raw('quantity * price'));
             
             return $store;
         });
 
         return view('admin.settlement', compact('stores'));
+    }
+    public function payouts()
+    {
+        $payouts = \App\Models\Payout::with('store')->latest()->paginate(20);
+        return view('admin.payouts.index', compact('payouts'));
+    }
+
+    public function showPayout($id)
+    {
+        $payout = \App\Models\Payout::with(['store', 'items.product'])->findOrFail($id);
+        return view('admin.payouts.show', compact('payout'));
     }
 }

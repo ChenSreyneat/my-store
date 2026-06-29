@@ -39,6 +39,10 @@
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
                 Store Details
             </button>
+            <button onclick="scrollToSection('payment-accounts-section')" class="nav-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                Payment Accounts
+            </button>
             <button onclick="scrollToSection('elite-support-section')" class="nav-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
                 Help & Support
@@ -136,6 +140,65 @@
                 </form>
             </div>
 
+            <!-- Payment Accounts -->
+            <div id="payment-accounts-section" style="padding: 3rem; background: #ffffff; border-radius: 24px; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem;">
+                    <h2 style="font-weight: 800; font-size: 1.6rem; display: flex; align-items: center; gap: 1rem; color: #1e293b; margin: 0;">
+                        <div style="width: 40px; height: 40px; background: #e0f2fe; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #0ea5e9;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                        </div>
+                        Payment Accounts
+                    </h2>
+                </div>
+
+                <div style="margin-bottom: 3rem;">
+                    <h3 style="margin-bottom: 1.5rem; font-weight: 800; font-size: 1.1rem; color: #1e293b; margin-top: 0;">Add New Account</h3>
+                    <form action="{{ route('owner.payment_accounts.store') }}" method="POST" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; align-items: end;">
+                        @csrf
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <label style="font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b;">Bakong ID</label>
+                            <input type="text" name="account_id" required placeholder="yourname@bank" style="padding: 0.8rem 1.2rem; border-radius: 12px; border: 1px solid #e2e8f0; font-size: 0.95rem; outline: none; transition: 0.2s; background: #f8fafc;" onfocus="this.style.borderColor='#6366f1'; this.style.boxShadow='0 0 0 3px rgba(99,102,241,0.1)'" onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'">
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <label style="font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b;">Account Name</label>
+                            <input type="text" name="account_name" required placeholder="Full Name" style="padding: 0.8rem 1.2rem; border-radius: 12px; border: 1px solid #e2e8f0; font-size: 0.95rem; outline: none; transition: 0.2s; background: #f8fafc;" onfocus="this.style.borderColor='#6366f1'; this.style.boxShadow='0 0 0 3px rgba(99,102,241,0.1)'" onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'">
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <label style="font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b;">Currency</label>
+                            <select name="currency" required style="padding: 0.8rem 1.2rem; border-radius: 12px; border: 1px solid #e2e8f0; font-size: 0.95rem; outline: none; transition: 0.2s; background: #f8fafc;" onfocus="this.style.borderColor='#6366f1'; this.style.boxShadow='0 0 0 3px rgba(99,102,241,0.1)'" onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'">
+                                <option value="USD">USD - US Dollar</option>
+                                <option value="KHR">KHR - Khmer Riel</option>
+                            </select>
+                        </div>
+                        <button type="submit" style="padding: 0.9rem 1.5rem; border-radius: 12px; font-weight: 700; background: #10b981; color: white; border: none; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(16,185,129,0.3); height: 48px; display: flex; align-items: center; justify-content: center;" onmouseover="this.style.background='#059669'" onmouseout="this.style.background='#10b981'">Register</button>
+                    </form>
+                </div>
+
+                <div>
+                    <h3 style="margin-bottom: 1.5rem; font-weight: 800; font-size: 1.1rem; color: #1e293b; margin-top: 0;">My Registered Accounts</h3>
+                    <div style="background: #f8fafc; border-radius: 16px; border: 1px solid #e2e8f0; overflow: hidden;">
+                        @foreach($paymentAccounts as $account)
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; border-bottom: 1px solid #e2e8f0;">
+                            <div>
+                                <div style="font-weight: 700; color: #6366f1; font-size: 1rem;">{{ $account->account_id }}</div>
+                                <div style="font-size: 0.85rem; color: #64748b; margin-top: 0.2rem;">{{ $account->account_name }} ({{ $account->currency }})</div>
+                            </div>
+                            <form action="{{ route('owner.payment_accounts.destroy', $account->id) }}" method="POST" style="margin: 0;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" style="padding: 0.5rem 1rem; font-size: 0.8rem; font-weight: 700; border-radius: 8px; color: #ef4444; background: #fef2f2; border: 1px solid #fee2e2; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#fee2e2'" onmouseout="this.style.background='#fef2f2'">Remove</button>
+                            </form>
+                        </div>
+                        @endforeach
+                        @if($paymentAccounts->isEmpty())
+                        <div style="padding: 2rem; text-align: center; color: #64748b; font-weight: 600; font-size: 0.9rem;">
+                            No payment accounts registered yet.
+                        </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
             <!-- Elite Support -->
             <div id="elite-support-section" style="padding: 3rem; background: #fffcfdf8; border-radius: 24px; border: 1px solid #fdf2f8; box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
@@ -217,7 +280,7 @@
 
     // Auto update active nav on scroll
     window.addEventListener('scroll', () => {
-        const sections = ['info-section', 'business-node-section', 'elite-support-section'];
+        const sections = ['info-section', 'business-node-section', 'payment-accounts-section', 'elite-support-section'];
         let current = '';
         
         sections.forEach(s => {

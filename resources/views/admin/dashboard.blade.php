@@ -158,6 +158,32 @@
             </div>
         </div>
 
+        <!-- Pending Payouts -->
+        <div class="stat-card-clean">
+            <div class="icon-container-pill" style="background: rgba(249, 115, 22, 0.08); color: #f97316;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+            </div>
+            <div>
+                <div style="font-size: 1.6rem; font-weight: 900; font-family: 'Outfit'; color: #f97316; line-height: 1.1;">
+                    ${{ number_format($stats['pending_payouts'] ?? 0, 2) }}
+                </div>
+                <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-dim); margin-top: 0.2rem;">Pending Payouts</div>
+            </div>
+        </div>
+
+        <!-- Settled Payouts -->
+        <div class="stat-card-clean">
+            <div class="icon-container-pill" style="background: rgba(139, 92, 246, 0.08); color: #7c3aed;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+            </div>
+            <div>
+                <div style="font-size: 1.6rem; font-weight: 900; font-family: 'Outfit'; color: #7c3aed; line-height: 1.1;">
+                    ${{ number_format($stats['settled_payouts'] ?? 0, 2) }}
+                </div>
+                <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-dim); margin-top: 0.2rem;">Settled Payouts</div>
+            </div>
+        </div>
+
     </div>
 
     <!-- Row 2: Large Trend Charts (Pre-built Rigs vs. Custom Loop Sales & Platform Categories Breakdown) -->

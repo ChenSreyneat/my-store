@@ -59,6 +59,32 @@
             </div>
         </div>
 
+        <!-- Pending Payouts -->
+        <div style="background: #ffffff; border-radius: 20px; padding: 1.8rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 15px rgba(0,0,0,0.02); display: flex; align-items: center; gap: 1.5rem; transition: 0.3s;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 10px 25px rgba(0,0,0,0.04)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.02)';">
+            <div style="width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: #fff7ed; color: #f97316;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </div>
+            <div>
+                <div style="font-size: 1.8rem; font-weight: 800; color: #f97316; line-height: 1;">
+                    ${{ number_format($stats['pending_payouts'] ?? 0, 2) }}
+                </div>
+                <div style="font-size: 0.85rem; font-weight: 600; color: #64748b; margin-top: 0.4rem;">Pending Payouts</div>
+            </div>
+        </div>
+
+        <!-- Settled Payouts -->
+        <div style="background: #ffffff; border-radius: 20px; padding: 1.8rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 15px rgba(0,0,0,0.02); display: flex; align-items: center; gap: 1.5rem; transition: 0.3s;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 10px 25px rgba(0,0,0,0.04)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.02)';">
+            <div style="width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: #f5f3ff; color: #7c3aed;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+            </div>
+            <div>
+                <div style="font-size: 1.8rem; font-weight: 800; color: #7c3aed; line-height: 1;">
+                    ${{ number_format($stats['settled_payouts'] ?? 0, 2) }}
+                </div>
+                <div style="font-size: 0.85rem; font-weight: 600; color: #64748b; margin-top: 0.4rem;">Settled Payouts</div>
+            </div>
+        </div>
+
     </div>
 
     <!-- Operations & Logistics -->

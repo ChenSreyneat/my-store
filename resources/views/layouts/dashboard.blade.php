@@ -708,6 +708,10 @@
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.407 2.651 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.407-2.651-1M12 16V7"></path></svg>
                             Vendor Settlement
                         </a>
+                        <a href="{{ route('admin.payouts') }}" class="sidebar-link {{ request()->routeIs('admin.payouts*') ? 'active' : '' }}">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                            Payout History
+                        </a>
                         <a href="{{ route('admin.payment_accounts') }}" class="sidebar-link {{ request()->routeIs('admin.payment_accounts') ? 'active' : '' }}">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
                             Payment Protocols
@@ -751,6 +755,10 @@
                             @if(isset($pendingOrdersCount) && $pendingOrdersCount > 0)
                                 <span class="badge badge-red" style="margin-left: auto;">{{ $pendingOrdersCount }}</span>
                             @endif
+                        </a>
+                        <a href="{{ route('owner.payouts') }}" class="sidebar-link {{ request()->routeIs('owner.payouts*') ? 'active' : '' }}">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                            Payout History
                         </a>
                         <a href="{{ route('owner.reports') }}" class="sidebar-link {{ request()->routeIs('owner.reports') ? 'active' : '' }}">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>

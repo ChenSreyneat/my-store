@@ -101,7 +101,11 @@ Route::middleware(['auth', 'can:isAdmin'])->prefix('admin')->name('admin.')->gro
     Route::get('/payments', [AdminController::class, 'payments'])->name('payments');
     Route::get('/reports', [AdminController::class, 'reports'])->name('reports');
     Route::get('/settlement', [AdminController::class, 'settlement'])->name('settlement');
-    
+    Route::get('/settlement/store/{id}/orders', [AdminController::class, 'storeOrders'])->name('settlement.store_orders');
+    Route::post('/settlement/store/{id}/payout', [AdminController::class, 'payoutStore'])->name('settlement.payout');
+    Route::post('/settlement/store/{id}/check-payout', [AdminController::class, 'checkPayoutMd5'])->name('settlement.check_payout');
+    Route::get('/payouts', [AdminController::class, 'payouts'])->name('payouts');
+    Route::get('/payouts/{id}', [AdminController::class, 'showPayout'])->name('payouts.show');    
     // Impersonation
     Route::post('/users/{id}/impersonate', [AdminController::class, 'impersonate'])->name('users.impersonate');
     Route::post('/stop-impersonating', [AdminController::class, 'stopImpersonating'])->name('stop_impersonating');
@@ -124,7 +128,8 @@ Route::middleware(['auth', 'can:isOwner'])->prefix('owner')->name('owner.')->gro
     Route::put('/orders/{id}', [OwnerController::class, 'updateOrder'])->name('orders.update');
     Route::get('/payments', [OwnerController::class, 'payments'])->name('payments');
     Route::get('/reports', [OwnerController::class, 'reports'])->name('reports');
-    
+    Route::get('/payouts', [OwnerController::class, 'payouts'])->name('payouts');
+    Route::get('/payouts/{id}', [OwnerController::class, 'showPayout'])->name('payouts.show');    
     // Owner Payment Accounts
     Route::get('/payment-accounts', [OwnerController::class, 'paymentAccounts'])->name('payment_accounts');
     Route::post('/payment-accounts', [OwnerController::class, 'storePaymentAccount'])->name('payment_accounts.store');

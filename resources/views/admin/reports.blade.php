@@ -147,6 +147,69 @@
             </table>
         </div>
     </div>
+
+    <!-- Product Payout Reconciliation Report -->
+    <div class="glass-card" style="padding: 2.5rem; background: #ffffff; border-color: rgba(15, 23, 42, 0.05); box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.03); margin-top: 3.5rem;">
+        <h3 style="margin-bottom: 2rem; font-weight: 900; font-family: 'Outfit'; color: var(--text);">Product Payout Reconciliation</h3>
+        <div class="table-container">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 900px;">
+                <thead>
+                    <tr style="border-bottom: 1px solid rgba(15, 23, 42, 0.05);">
+                        <th style="padding: 1.25rem 1.5rem; opacity: 0.5; font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px;">Product</th>
+                        <th style="padding: 1.25rem 1.5rem; opacity: 0.5; font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px;">Store</th>
+                        <th style="padding: 1.25rem 1.5rem; opacity: 0.5; font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; text-align: center;">Completed Units</th>
+                        <th style="padding: 1.25rem 1.5rem; opacity: 0.5; font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; text-align: right;">Settled Payout</th>
+                        <th style="padding: 1.25rem 1.5rem; opacity: 0.5; font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; text-align: right;">Pending Payout</th>
+                        <th style="padding: 1.25rem 1.5rem; opacity: 0.5; font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; text-align: right;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($productPayouts as $product)
+                    @php
+                        if ($product->pending_payout > 0 && $product->settled_payout > 0) {
+                            $payoutStatus = 'Partially Settled';
+                            $payoutBadge = ['bg' => 'rgba(245, 158, 11, 0.08)', 'color' => '#f59e0b'];
+                        } elseif ($product->pending_payout > 0) {
+                            $payoutStatus = 'Pending Payout';
+                            $payoutBadge = ['bg' => 'rgba(239, 68, 68, 0.08)', 'color' => '#ef4444'];
+                        } else {
+                            $payoutStatus = 'Fully Settled';
+                            $payoutBadge = ['bg' => 'rgba(16, 185, 129, 0.08)', 'color' => '#10b981'];
+                        }
+                    @endphp
+                    <tr style="border-bottom: 1px solid rgba(15, 23, 42, 0.05); transition: background 0.3s;" onmouseover="this.style.background='rgba(15, 23, 42, 0.01)'" onmouseout="this.style.background='transparent'">
+                        <td style="padding: 1.25rem 1.5rem;">
+                            <div style="font-weight: 700; font-size: 1.05rem; color: var(--text);">{{ $product->name }}</div>
+                            <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.2rem;">ID: #PROD-{{ $product->id }}</div>
+                        </td>
+                        <td style="padding: 1.25rem 1.5rem;">
+                            <div style="font-weight: 600; color: var(--text);">{{ $product->store->name ?? 'N/A' }}</div>
+                        </td>
+                        <td style="padding: 1.25rem 1.5rem; text-align: center; font-weight: 700; color: var(--text);">
+                            {{ $product->total_completed_sold }}
+                        </td>
+                        <td style="padding: 1.25rem 1.5rem; text-align: right; font-weight: 800; color: #10b981;">
+                            ${{ number_format($product->settled_payout, 2) }}
+                        </td>
+                        <td style="padding: 1.25rem 1.5rem; text-align: right; font-weight: 800; color: #f59e0b;">
+                            ${{ number_format($product->pending_payout, 2) }}
+                        </td>
+                        <td style="padding: 1.25rem 1.5rem; text-align: right;">
+                            <span style="padding: 0.35rem 0.8rem; border-radius: 50px; font-size: 0.7rem; font-weight: 800; background: {{ $payoutBadge['bg'] }}; color: {{ $payoutBadge['color'] }}; text-transform: uppercase; letter-spacing: 0.5px;">
+                                {{ $payoutStatus }}
+                            </span>
+                        </td>
+                    </tr>
+                    @endforeach
+                    @if($productPayouts->isEmpty())
+                    <tr>
+                        <td colspan="6" style="padding: 6rem 1.5rem; text-align: center; color: var(--text-dim); font-weight: 700; font-size: 0.95rem;">NO COMPLETED PRODUCT SALES DETECTED</td>
+                    </tr>
+                    @endif
+                </tbody>
+            </table>
+        </div>
+    </div>
 </section>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

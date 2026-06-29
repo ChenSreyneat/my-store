@@ -31,7 +31,7 @@ class BakongController extends Controller
         $displayAmount = ($currency === 'USD') ? round($order->total_amount, 2) : round($order->total_amount * 4100, 0);
 
         try {
-            $khqrString = $this->generateKhqrString(
+            $khqrString = self::generateKhqrString(
                 $paymentAccount->account_id,
                 $paymentAccount->account_name,
                 $paymentAccount->account_city ?? 'Phnom Penh',
@@ -206,7 +206,7 @@ class BakongController extends Controller
         return null;
     }
 
-    private function calculateCrc16($data)
+    public static function calculateCrc16($data)
     {
         $crc = 0xFFFF;
         $jf = 0x1021;
@@ -226,7 +226,7 @@ class BakongController extends Controller
         return strtoupper(str_pad(dechex($crc), 4, '0', STR_PAD_LEFT));
     }
 
-    private function generateTlv($tag, $value)
+    public static function generateTlv($tag, $value)
     {
         if ($value === null || $value === '') return '';
         $valueStr = (string) $value;
@@ -234,28 +234,28 @@ class BakongController extends Controller
         return $tag . $length . $valueStr;
     }
 
-    private function generateKhqrString($bankAccount, $merchantName, $merchantCity, $amount, $currency, $billNumber)
+    public static function generateKhqrString($bankAccount, $merchantName, $merchantCity, $amount, $currency, $billNumber)
     {
         $qr = "";
-        $qr .= $this->generateTlv("00", "01"); 
-        $qr .= $this->generateTlv("01", "12"); 
-        $qr .= $this->generateTlv("29", $this->generateTlv("00", $bankAccount));
-        $qr .= $this->generateTlv("52", "5999"); 
-        $qr .= $this->generateTlv("53", $currency === 'KHR' ? "116" : "840"); 
+        $qr .= self::generateTlv("00", "01"); 
+        $qr .= self::generateTlv("01", "12"); 
+        $qr .= self::generateTlv("29", self::generateTlv("00", $bankAccount));
+        $qr .= self::generateTlv("52", "5999"); 
+        $qr .= self::generateTlv("53", $currency === 'KHR' ? "116" : "840"); 
         if ($amount !== null && $amount !== '') {
             $amountStr = ($currency === 'KHR') ? (string)round((float)$amount) : number_format((float)$amount, 2, '.', '');
-            $qr .= $this->generateTlv("54", $amountStr);
+            $qr .= self::generateTlv("54", $amountStr);
         }
-        $qr .= $this->generateTlv("58", "KH");
-        $qr .= $this->generateTlv("59", $merchantName);
-        $qr .= $this->generateTlv("60", $merchantCity ?: "Phnom Penh");
+        $qr .= self::generateTlv("58", "KH");
+        $qr .= self::generateTlv("59", $merchantName);
+        $qr .= self::generateTlv("60", $merchantCity ?: "Phnom Penh");
         $now = (int) round(microtime(true) * 1000);
         $expiry = $now + (86400000 * 1); 
-        $tag99inner = $this->generateTlv("00", (string)$now) . $this->generateTlv("01", (string)$expiry);
-        $qr .= $this->generateTlv("99", $tag99inner);
-        if ($billNumber) $qr .= $this->generateTlv("62", $this->generateTlv("01", $billNumber));
+        $tag99inner = self::generateTlv("00", (string)$now) . self::generateTlv("01", (string)$expiry);
+        $qr .= self::generateTlv("99", $tag99inner);
+        if ($billNumber) $qr .= self::generateTlv("62", self::generateTlv("01", $billNumber));
         $qr .= "6304";
-        $qr .= $this->calculateCrc16($qr);
+        $qr .= self::calculateCrc16($qr);
         return $qr;
     }
 

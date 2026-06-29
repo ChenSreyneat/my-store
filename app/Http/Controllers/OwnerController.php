@@ -21,6 +21,20 @@ class OwnerController extends Controller
                 $q->where('store_id', $store->id);
             })->count(),
             'stock' => Product::where('store_id', $store->id)->sum('stock'),
+            'pending_payouts' => \App\Models\OrderItem::whereHas('product', function($q) use ($store) {
+                    $q->where('store_id', $store->id);
+                })
+                ->whereHas('order', function($q) {
+                    $q->where('status', 'completed')->where('is_settled', false);
+                })
+                ->sum(\DB::raw('quantity * price')),
+            'settled_payouts' => \App\Models\OrderItem::whereHas('product', function($q) use ($store) {
+                    $q->where('store_id', $store->id);
+                })
+                ->whereHas('order', function($q) {
+                    $q->where('status', 'completed')->where('is_settled', true);
+                })
+                ->sum(\DB::raw('quantity * price')),
         ];
         $recentOrders = Order::whereHas('items.product', function($q) use ($store) {
             $q->where('store_id', $store->id);
@@ -107,19 +121,45 @@ class OwnerController extends Controller
     public function payments()
     {
         $store = Auth::user()->store;
+        
+        // Fetch completed, unsettled orders for the store
         $orders = Order::whereHas('items.product', function($q) use ($store) {
             $q->where('store_id', $store->id);
-        })->where('status', 'paid')->with(['items.product', 'user'])->latest()->get();
+        })
+        ->where('status', 'completed')
+        ->where('is_settled', false) // If product payout already don't show
+        ->with(['items.product', 'user'])
+        ->latest()
+        ->get();
 
+        // Total Earnings: sum of all completed orders (both settled and unsettled)
         $totalEarnings = \App\Models\OrderItem::whereHas('product', function($q) use ($store) {
                 $q->where('store_id', $store->id);
             })
             ->whereHas('order', function($q) {
-                $q->where('status', 'paid');
+                $q->where('status', 'completed');
+            })
+            ->sum(\DB::raw('price * quantity'));
+
+        // Pending Payouts: sum of completed and unsettled orders
+        $pendingPayouts = \App\Models\OrderItem::whereHas('product', function($q) use ($store) {
+                $q->where('store_id', $store->id);
+            })
+            ->whereHas('order', function($q) {
+                $q->where('status', 'completed')->where('is_settled', false);
+            })
+            ->sum(\DB::raw('price * quantity'));
+
+        // Settled Payouts: sum of completed and settled orders
+        $settledPayouts = \App\Models\OrderItem::whereHas('product', function($q) use ($store) {
+                $q->where('store_id', $store->id);
+            })
+            ->whereHas('order', function($q) {
+                $q->where('status', 'completed')->where('is_settled', true);
             })
             ->sum(\DB::raw('price * quantity'));
         
-        return view('owner.payments', compact('orders', 'totalEarnings'));
+        return view('owner.payments', compact('orders', 'totalEarnings', 'pendingPayouts', 'settledPayouts'));
     }
 
     public function settings()
@@ -218,7 +258,7 @@ class OwnerController extends Controller
             'currency' => 'required|in:USD,KHR',
         ]);
 
-        \App\Models\PaymentAccount::create([
+        $account = \App\Models\PaymentAccount::create([
             'user_id' => Auth::id(),
             'account_id' => $request->account_id,
             'account_name' => $request->account_name,
@@ -226,6 +266,13 @@ class OwnerController extends Controller
             'currency' => $request->currency,
             'is_active' => true,
         ]);
+
+        // Auto-link to store if not set
+        $store = Auth::user()->store;
+        if ($store && !$store->payment_account_id) {
+            $store->payment_account_id = $account->id;
+            $store->save();
+        }
 
         return back()->with('success', 'Payment account registered.');
     }
@@ -269,7 +316,36 @@ class OwnerController extends Controller
                 $q->where('store_id', $store->id);
             })->with(['user', 'items.product'])->latest()->limit(10)->get();
 
-        return view('owner.reports', compact('monthlyRevenue', 'topProducts', 'recentOrders'));
+        // Product Payout Report Details
+        $productPayouts = Product::where('store_id', $store->id)
+            ->get()
+            ->map(function($product) {
+                // Calculate settled sales (completed and settled orders)
+                $settledSales = \App\Models\OrderItem::where('product_id', $product->id)
+                    ->whereHas('order', function($q) {
+                        $q->where('status', 'completed')->where('is_settled', true);
+                    });
+                $product->settled_units = $settledSales->sum('quantity');
+                $product->settled_payout = $settledSales->sum(\DB::raw('quantity * price'));
+
+                // Calculate pending sales (completed and unsettled orders)
+                $pendingSales = \App\Models\OrderItem::where('product_id', $product->id)
+                    ->whereHas('order', function($q) {
+                        $q->where('status', 'completed')->where('is_settled', false);
+                    });
+                $product->pending_units = $pendingSales->sum('quantity');
+                $product->pending_payout = $pendingSales->sum(\DB::raw('quantity * price'));
+                
+                $product->total_completed_sold = $product->settled_units + $product->pending_units;
+
+                return $product;
+            })
+            ->filter(function($product) {
+                return $product->total_completed_sold > 0;
+            })
+            ->sortByDesc('pending_payout');
+
+        return view('owner.reports', compact('monthlyRevenue', 'topProducts', 'recentOrders', 'productPayouts'));
     }
 
     public function users()
@@ -286,5 +362,18 @@ class OwnerController extends Controller
         }])->get();
 
         return view('owner.users', compact('users'));
+    }
+    public function payouts()
+    {
+        $storeId = Auth::user()->store_id;
+        $payouts = \App\Models\Payout::where('store_id', $storeId)->latest()->paginate(20);
+        return view('owner.payouts.index', compact('payouts'));
+    }
+
+    public function showPayout($id)
+    {
+        $storeId = Auth::user()->store_id;
+        $payout = \App\Models\Payout::with(['items.product'])->where('store_id', $storeId)->findOrFail($id);
+        return view('owner.payouts.show', compact('payout'));
     }
 }

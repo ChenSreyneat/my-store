@@ -56,14 +56,7 @@
                         @endif
                     </td>
                     <td style="padding: 1.25rem 1.5rem; text-align: right;">
-                        @if($store->owner)
-                        <form action="{{ route('admin.users.impersonate', $store->owner->id) }}" method="POST" style="margin: 0; display: inline-block;">
-                            @csrf
-                            <button type="submit" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.75rem; border-radius: 8px; font-weight: 700; color: var(--primary); border-color: rgba(99,102,241,0.2);">Audit Store</button>
-                        </form>
-                        @else
-                        <span style="font-size: 0.8rem; color: var(--text-dim); font-weight: 700;">NO OWNER</span>
-                        @endif
+                        <a href="{{ route('admin.settlement.store_orders', $store->id) }}" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.75rem; border-radius: 8px; font-weight: 700; color: var(--primary); border-color: rgba(99,102,241,0.2); text-decoration: none; display: inline-block;">Audit Store</a>
                     </td>
                 </tr>
                 @endforeach
